@@ -1,32 +1,79 @@
 // js/data-tawasul.js
 
 export const tawasulData = {
-  title: "Bacaan Tawasul / Hadrah",
-  category: "Doa & Tawasul",
+  title: "Tawasul / Hadrah Lengkap",
+  category: "Tawasul & Hadrah",
   items: [
     {
       number: 1,
-      arabic: "إِلَى حَضْرَةِ النَّبِيِّ الْمُصْطَفَى مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ وَعَلَى آلِهِ وَأَصْحَابِهِ وَأَزْوَاجِهِ وَذُرِّيَّاتِهِ وَأَهْلِ بَيْتِهِ الْكِرَامِ، شَيْءٌ لِلَّهِ لَهُمُ الْفَاتِحَةُ",
-      latin: "Ila ḥaḍratin-nabiyyil-muṣṭafā Muḥammadin ṣallallāhu 'alaihi wa sallama wa 'alā ālihī wa aṣḥābihī wa azwājihī wa dzurriyyātihī wa ahli baitihil-kirām, syai'un lillāhi lahumul-fātiḥah.",
-      translation: "Kepada keharibaan Nabi yang terpilih, Nabi Muhammad SAW, dan kepada keluarga, sahabat, istri-istri, keturunan, serta ahli baitnya yang mulia. Segala sesuatu milik Allah, bagi mereka Al-Fatihah."
+      section: "Pembuka (Dibaca Bersama-sama)",
+      arabic: "أَشْهَدُ أَنْ لَا إِٰلَهَ إِلاَّ اللهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُوْلُ اللهِ (٣x)\nأَسْتَغْفِرُ اللهَ الْعَظِيْمَ الَّذِيْ لَا إِلٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّوْمُ وَأَتُوْبُ إِلَيْهِ (٣x)\nلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ الْعَلِيِّ الْعَظِيْمِ\nأَعُوْذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيْمِ",
+      latin: "Asyhadu allā ilāha illallāh, wa asyhadu anna Muhammadar Rasūlullāh. (3x)\nAstaghfirullāhal-'azhīm, alladzī lā ilāha illā huwal-hayyul-qayyūmu wa atūbu ilaih. (3x)\nLā haulaw lā quwwata illā billāhil-'aliyyil-'azhīm.\nA'ūdzubillāhi minasy-syaithānir-rajīm.",
+      note: "Dibaca bersama-sama oleh Pemimpin dan Jamaah."
     },
     {
       number: 2,
-      arabic: "ثُمَّ إِلَى حَضْرَاتِ إِخْوَانِهِ مِنَ الْأَنْبِيَاءِ وَالْمُرْسَلِينَ وَالْأَوْلِيَاءِ وَالشُّهَدَاءِ وَالصَّالِحِينَ وَالصَّحَابَةِ وَالتَّابِعِينَ وَالْعُلَمَاءِ الْعَامِلِينَ وَالْمُصَنِّفِينَ الْمُخْلِصِينَ وَجَمِيعِ الْمَلَائِكَةِ الْمُقَرَّبِينَ، شَيْءٌ لِلَّهِ لَهُمُ الْفَاتِحَةُ",
-      latin: "Tsumma ilā ḥaḍrāti ikhwānihī minal-ambiyā'i wal-mursalīna wal-auliyā'i wasy-syuhadā'i waṣ-ṣāliḥīna waṣ-ṣaḥābati wat-tābi'īna wal-'ulamā'il-'āmilīna wal-muṣannifīnal-mukhliṣīna wa jamī'il-malā'ikatil-muqarrabīn, syai'un lillāhi lahumul-fātiḥah.",
-      translation: "Kemudian kepada keharibaan para saudaranya dari para nabi, rasul, wali, syuhada, orang-orang saleh, sahabat, tabi'in, ulama yang mengamalkan ilmunya, para penyusun kitab yang ikhlas, dan seluruh malaikat Muqarrabin. Segala sesuatu milik Allah, bagi mereka Al-Fatihah."
+      section: "Tawasul ke Nabi Muhammad SAW, Keluarga, & Sahabat",
+      arabic: "إِلَى حَضْرَةِ النَّبِيِّ الْمُصْطَفَى مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ، وَعَلَى آلِهِ وَأَزْوَاجِهِ وَذُرِّيَّاتِهِ وَأَهْلِ بَيْتِهِ، وَأَصْحَابِهِ الْكِرَامِ، خُصُوْصًا سَيِّدَنَا أَبَا بَكْرٍ وَعُمَرَ وَعُثْمَانَ وَعَلِيًّا، وَإِلَى بَقِيَّةِ الصَّحَابَةِ أَجْمَعِيْنَ، شَيْءٌ لِلّٰهِ لَهُمُ، الْفَاتِحَةُ...",
+      latin: "Ila hadhratin-nabiyyil musthafa Muhammadin shallallahu 'alaihi wa sallam, wa 'ala alihi wa azwajihi wa dzurriyyatihi wa ahli baitihi, wa ashabihil kiram, khushushan sayyidana Aba Bakrin wa 'Umara wa 'Utsmana wa 'Aliyya, wa ila baqiyyatis-sahabati ajma'in, syai-un lillahi lahumul, Al-Fatihah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
     },
     {
       number: 3,
-      arabic: "ثُمَّ إِلَى جَمِيعِ أَهْلِ الْقُبُورِ مِنَ الْمُسْلِمِينَ وَالْمُسْلِمَاتِ وَالْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ مِنْ مَشَارِقِ الْأَرْضِ إِلَى مَغَارِبِهَا بَرِّهَا وَبَحْرِهَا، خُصُوصًا إِلَى آبَائِنَا وَأُمَّهَاتِنَا وَأَجْدَادِنَا وَجَدَّاتِنَا وَمَشَايِخِنَا وَمَشَايِخِ مَشَايِخِنَا وَلِمَنِ اجْتَمَعْنَا هَهُنَا بِسَبَبِهِ، شَيْءٌ لِلَّهِ لَهُمُ الْفَاتِحَةُ",
-      latin: "Tsumma ilā jamī'i ahlil-qubūri minal-muslimīna wal-muslimāti wal-mu'minīna wal-mu'mināti min masyāriqil-arḍi ilā maghāribihā barrihā wa baḥrihā, khuṣūṣan ilā ābā'inā wa ummahātinā wa ajdādinā wa Jaddātinā wa masyāyikhinā wa masyāyikhi masyāyikhinā wa limanij-tama'nā hāhunā bisababih, syai'un lillāhi lahumul-fātiḥah.",
-      translation: "Kemudian kepada seluruh ahli kubur dari kaum muslimin dan muslimat, mukminin dan mukminat dari timur hingga barat bumi, baik di darat maupun di laut, khususnya kepada bapak-bapak kami, ibu-ibu kami, kakek-kakek kami, nenek-nenek kami, guru-guru kami, guru dari guru-guru kami, dan kepada orang yang menjadi sebab kami berkumpul di sini. Segala sesuatu milik Allah, bagi mereka Al-Fatihah."
+      section: "Para Nabi, Malaikat, Wali & Pemimpin Thariqah",
+      arabic: "ثُمَّ إِلَى حَضَرَاتِ إِخْوَانِهِ مِنَ الأَنْبِيَاءِ وَالْمُرْسَلِيْنَ، وَالمَلَائِكَةِ المَقُرَّبِيْنَ، وَالشُّهَدَاءِ وَالصَّالِحِيْنَ، وَالأَوْلِيَاءِ فِي مَشَارِقِ الأَرْضِ وَمَغَارِبِهَا بَرِّهَا وَبَحْرِهَا، خُصُوْصًا إِلَى سُلْطَانِ الأَوْلِيَاءِ الشَّيْخِ عَبْدِ القَادِرِ الجَيْلَانِيِّ، وَالشَّيْخِ أَبِي الحَسَنِ الشَّاذِلِيِّ، وَالشَّيْخِ أَحْمَدَ الرِّفَاعِيِّ، وَالشَّيْخِ أَبِي يَزِيْدَ البُسْطَامِيِّ، وَمَشَايِخِ الطَّرِيْقَةِ أَجْمَعِيْنَ، شَيْءٌ لِلّٰهِ لَهُمُ، الْفَاتِحَةُ...",
+      latin: "Tsumma ila hadharati ikhwanihi minal ambiya-i wal mursalin, wal malaikatil muqarrabin, wash-syuhada-i wash-shalihin, wal auliya-i fi masyariqil ardhi wa magharibiha barriha wa bahriha, khushushan ila sulthanil auliya-i syekh 'Abdul Qadir Al-Jilani, wa syekh Abil Hasan Asy-Syadzili, wa syekh Ahmad Ar-Rifa'i, wa syekh Abi Yazid Al-Busthami, wa masyayikhith-thariqati ajma'in, syai-un lillahi lahumul, Al-Fatihah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
     },
     {
       number: 4,
-      arabic: "خُصُوصًا إِلَى الشَّيْخِ عَبْدِ الْقَادِرِ الْجَيْلَانِيِّ كَرَّمَ اللهُ وَجْهَهُ وَرَضِيَ اللهُ عَنْهُ، شَيْءٌ لِلَّهِ لَهُ الْفَاتِحَةُ",
-      latin: "Khuṣūṣan ilāsy-Syaikhi 'Abdul-Qādiril-Jailānī karramallāhu wajhahū wa raḍiyallāhu 'anh, syai'un lillāhi lahul-fātiḥah.",
-      translation: "Khususnya kepada Syekh Abdul Qadir Al-Jailani, semoga Allah memuliakan wajahnya dan meredainya. Segala sesuatu milik Allah, baginya Al-Fatihah."
+      section: "Para Imam Mazhab, Ulama, & Wali Songo / Guru Lokal",
+      arabic: "ثُمَّ إِلَى أَئِمَّةِ المُجْتَهِدِيْنَ وَمُقَلِّدِيْهِمْ فِي الدِّيْنِ، وَالعُلَمَاءِ العَامِلِيْنَ، وَالفُقَهَاءِ وَالمُحَدِّثِيْنَ، وَالمُفَسِّرِيْنَ، وَالصُّوْفِيَّةِ المُمَحِّصِيْنَ، خُصُوْصًا الإِمَامَ الشَّافِعِيَّ، وَالإِمَامَ مَالِكًا، وَالإِمَامَ أَبَا حَنِيْفَةَ، وَالإِمَامَ أَحْمَدَ بْنِ حَنْبَلٍ، وَإِلَى أَوْلِيَاءِ تِسْعَةٍ وَمَشَايِخِنَا فِي هٰذِهِ النَّاحِيَةِ، شَيْءٌ لِلّٰهِ لَهُمُ، الْفَاتِحَةُ...",
+      latin: "Tsumma ila a-immatil mujtahidina wa muqallidihim fid-din, wal 'ulamail 'amilin, wal fuqaha-i wal muhadditsin, wal mufassirin, wash-shufiyyatil mumahishin, khushushan Al-Imamasy-Syafi'i, wal Imama Malikan, wal Imama Aba Hanifah, wal Imama Ahmadabna Hanbal, wa ila auliya-i tis'ah (Wali Songo) wa masyayikhina fi hadzihin-nahiyah, syai-un lillahi lahumul, Al-Fatihah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
+    },
+    {
+      number: 5,
+      section: "Orang Tua, Leluhur, Guru, & Penitip Doa",
+      arabic: "ثُمَّ إِلَى آبَائِنَا وَأُمَّهَاتِنَا، وَأَجْدَادِنَا وَجَدَّاتِنَا، وَمَشَايِخِنَا وَمَشَايِخِ مَشَايِخِنَا، وَمُعَلِّمِيْنَا، وَلِمَنْ أَحْسَنَ إِلَيْنَا، وَلِمَنْ لَهُ حَقٌّ عَلَيْنَا، وَلِمَنْ أَوْصَانَا بِالدُّعَاءِ، شَيْءٌ لِلّٰهِ لَهُمُ، الْفَاتِحَةُ...",
+      latin: "Tsumma ila aba-ina wa ummahatina, wa ajdadina wa jaddatina, wa masyayikhina wa masyayikhi masyayikhina, wa mu'allimina, wa liman ahsana ilaina, wa liman lahu haqqun 'alaina, wa liman awsana bid-du'a-i, syai-un lillahi lahumul, Al-Fatihah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
+    },
+    {
+      number: 6,
+      section: "Ahli Kubur Umum (Kaum Muslimin & Muslimat)",
+      arabic: "ثُمَّ إِلَى جَمِيْعِ أَهْلِ القُبُوْرِ مِنَ المُسْلِمِيْنَ وَالمُسْلِمَاتِ وَالمُؤْمِنِيْنَ وَالمُؤْمِنَاتِ مِنْ مَشَارِقِ الأَرْضِ إِلَى مَغَارِبِهَا بَرِّهَا وَبَحْرِهَا مِنْ يَمِيْنِهَا إِلَى شِمَالِهَا، شَيْءٌ لِلّٰهِ لَهُمُ، الْفَاتِحَةُ...",
+      latin: "Tsumma ila jami'i ahlil quburi minal muslimina wal muslimat wal mu'minina wal mu'minat min masyariqil ardhi ila magharibiha barriha wa bahriha min yaminiha ila syimaliha, syai-un lillahi lahumul, Al-Fatihah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
+    },
+    {
+      number: "7a",
+      type: "ahli_kubur",
+      gender: "male",
+      section: "Khusus untuk Almarhum Ayahanda",
+      name: "Didi Carmadi bin Waskim",
+      arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ",
+      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا الْمَغْفُوْرِ لَهُ {NAME}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...",
+      latin: "Wa khushūshan ilā rūhi abīnal-maghfūr lah {NAME}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
+    },
+    {
+      number: "7b",
+      type: "ahli_kubur",
+      gender: "female",
+      section: "Khusus untuk Almarhumah Saudari / Teteh",
+      name: "Fitriah binti Didi Carmadi",
+      arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي",
+      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أُخْتِنَا الْمَغْفُوْرِ لَهَا {NAME}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...",
+      latin: "Wa khushūshan ilā rūhi ukhtinal-maghfūr lahā {NAME}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...",
+      note: "👉 Jamaah membaca Al-Fatihah 1x"
+    },
+    {
+      number: 8,
+      section: "Niat Hajat Bersama & Pintu Masuk Membaca Yasin",
+      arabic: "وَإِلَى حَضْرَةِ صَاحِبِ هٰذِهِ النِّيَّةِ وَالمَقْصُوْدِ، اَللّٰهُمَّ اقْضِ حَوَائِجَنَا، وَاشْفِ مَرْضَانَا، وَفَرِّجْ هُمُوْمَنَا، وَبَارِكْ فِي أَعْمَارِنَا وَأَمْوَالِنَا، وَثَبِّتْ إِيْمَانَنَا، وَاخْتِمْ لَنَا بِحُسْنِ الخَاتِمَةِ، وَإِلَى حَضْرَةِ النَّبِيِّ الْمُصْطَفَى مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ، الْفَاتِحَةُ...",
+      latin: "Wa ila hadhrati shahibi hadzihin-niyyati wal maqsud, Allahummaqdhi hawaijana, washfi mardhana, wa farrij humumana, wa barik fi a'marina wa amwalina, wa tsabbit imanana, wakhtim lana bi husnil khatimah, wa ila hadhratin-nabiyyil musthafa Muhammadin shallallahu 'alaihi wa sallam, Al-Fatihah...",
+      note: "👉 Setelah Al-Fatihah ke-8 selesai, langsung pimpin jamaah membaca Surah Yasin."
     }
   ]
 };

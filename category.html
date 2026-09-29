@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>N-Doa - Bacaan</title>
+  <title>N-Doa & Tawasul</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
@@ -17,44 +17,149 @@
       <p id="description" class="text-slate-500 text-sm mt-1"></p>
     </header>
 
-    <!-- Tempat menampilkan daftar ayat / doa -->
+    <!-- Form Khusus Kelola Ahli Kubur (Hanya Muncul di Tawasul) -->
+    <div id="custom-names-box" class="hidden bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-3">
+      <h2 class="font-bold text-emerald-900 text-sm">⚙️ Pengaturan Ahli Kubur / Almarhum(ah)</h2>
+      <p class="text-xs text-emerald-700">Tambahkan atau sesuaikan nama almarhum/almarhumah keluarga Anda di bawah ini:</p>
+      
+      <div id="names-list" class="space-y-2"></div>
+
+      <button id="add-person-btn" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-all">
+        + Tambah Almarhum / Almarhumah
+      </button>
+    </div>
+
+    <!-- Tempat menampilkan daftar bacaan -->
     <div id="content-list" class="space-y-4"></div>
   </div>
 
   <script type="module">
     import { prayersData, MENU_CATEGORIES } from './js/data-menu.js';
 
-    // Ambil ID dari URL (?id=yasin)
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get('id');
 
     const categoryInfo = MENU_CATEGORIES.find(c => c.id === categoryId);
-    const data = prayersData[categoryId];
+    let data = prayersData[categoryId];
 
-    if (data && data.items) {
+    // Simpan/Ambil Daftar Khusus Ahli Kubur dari LocalStorage jika ada
+    let localPersons = JSON.parse(localStorage.getItem('custom_ahli_kubur')) || [
+      { id: 1, section: "Khusus untuk Almarhum Ayahanda", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
+      { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
+    ];
+
+    function saveLocalPersons() {
+      localStorage.setItem('custom_ahli_kubur', JSON.stringify(localPersons));
+      renderContent();
+    }
+
+    function renderContent() {
+      if (!data) {
+        document.getElementById('title').innerText = "Data tidak ditemukan";
+        return;
+      }
+
       document.getElementById('title').innerText = data.title;
       document.getElementById('description').innerText = categoryInfo ? categoryInfo.description : '';
 
       const container = document.getElementById('content-list');
       container.innerHTML = '';
 
-      data.items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
-        card.innerHTML = `
-          <div class="flex justify-between items-center text-xs font-semibold text-emerald-700">
-            <span class="bg-emerald-50 px-2.5 py-1 rounded-full">Ayat / Bacaan #${item.number}</span>
-          </div>
-          <p class="text-right text-2xl font-serif leading-loose text-slate-800" dir="rtl">${item.arabic}</p>
-          <p class="text-sm font-medium text-emerald-800 leading-relaxed">${item.latin}</p>
-          <p class="text-xs text-slate-600 leading-relaxed italic border-t border-slate-100 pt-2">${item.translation}</p>
-        `;
-        container.appendChild(card);
+      if (categoryId === 'tawasul') {
+        document.getElementById('custom-names-box').classList.remove('hidden');
+        renderCustomNamesManager();
+      }
+
+      data.items.forEach((item, index) => {
+        // Jika poin biasa (bukan khusus 7a/7b)
+        if (item.type !== 'ahli_kubur') {
+          container.appendChild(createCard(item));
+        } else if (index === 6) { 
+          // Tempat menyisipkan seluruh nama ahli kubur yang ada di LocalStorage
+          localPersons.forEach((person, idx) => {
+            const isMale = person.gender === 'male';
+            const arText = isMale 
+              ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${person.arabic_name}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
+              : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${person.arabic_name}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
+
+            const latinText = isMale
+              ? `Wa khushūshan ilā rūhi abīnā/akhīnal-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`
+              : `Wa khushūshan ilā rūhi umminā/ukhtinal-maghfūr lahā ${person.name}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...`;
+
+            const customCardData = {
+              number: `7${String.fromCharCode(97 + idx)}`,
+              section: person.section,
+              arabic: arText,
+              latin: latinText,
+              note: "👉 Jamaah membaca Al-Fatihah 1x"
+            };
+            container.appendChild(createCard(customCardData));
+          });
+        }
       });
-    } else {
-      document.getElementById('title').innerText = "Data tidak ditemukan";
-      document.getElementById('description').innerText = "Silakan kembali ke menu utama.";
     }
+
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
+      
+      let headerText = item.section ? `${item.number ? item.number + '. ' : ''}${item.section}` : `Ayat / Bacaan #${item.number}`;
+
+      card.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-semibold text-emerald-700">
+          <span class="bg-emerald-50 px-2.5 py-1 rounded-full">${headerText}</span>
+        </div>
+        <p class="text-right text-2xl font-serif leading-loose text-slate-800" dir="rtl">${item.arabic.replace(/\n/g, '<br>')}</p>
+        <p class="text-sm font-medium text-emerald-800 leading-relaxed">${item.latin.replace(/\n/g, '<br>')}</p>
+        ${item.translation ? `<p class="text-xs text-slate-600 italic border-t pt-2">${item.translation}</p>` : ''}
+        ${item.note ? `<p class="text-xs font-medium text-amber-700 bg-amber-50 p-2 rounded-lg border border-amber-200">${item.note}</p>` : ''}
+      `;
+      return card;
+    }
+
+    function renderCustomNamesManager() {
+      const listEl = document.getElementById('names-list');
+      listEl.innerHTML = '';
+
+      localPersons.forEach((person, index) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex gap-2 items-center bg-white p-2 rounded-lg border border-slate-200 text-xs";
+        itemEl.innerHTML = `
+          <input type="text" value="${person.section}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Keterangan (mis: Ayahanda)" class="w-1/3 p-1.5 border rounded">
+          <input type="text" value="${person.name}" onchange="updatePerson(${index}, 'name', this.value)" placeholder="Nama Latin (mis: Didi Carmadi bin Waskim)" class="w-1/3 p-1.5 border rounded">
+          <input type="text" value="${person.arabic_name}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="Nama Arab" class="w-1/3 p-1.5 border rounded text-right" dir="rtl">
+          <select onchange="updatePerson(${index}, 'gender', this.value)" class="p-1.5 border rounded">
+            <option value="male" ${person.gender === 'male' ? 'selected' : ''}>L</option>
+            <option value="female" ${person.gender === 'female' ? 'selected' : ''}>P</option>
+          </select>
+          <button onclick="deletePerson(${index})" class="text-red-500 font-bold px-1.5 hover:text-red-700">✕</button>
+        `;
+        listEl.appendChild(itemEl);
+      });
+    }
+
+    window.updatePerson = (index, field, value) => {
+      localPersons[index][field] = value;
+      saveLocalPersons();
+    };
+
+    window.deletePerson = (index) => {
+      localPersons.splice(index, 1);
+      saveLocalPersons();
+    };
+
+    document.getElementById('add-person-btn').addEventListener('click', () => {
+      localPersons.push({
+        id: Date.now(),
+        section: "Khusus Almarhum/ah",
+        gender: "male",
+        name: "Nama Fulan bin Fulan",
+        arabic_name: "فلان بن فلان"
+      });
+      saveLocalPersons();
+    });
+
+    renderContent();
   </script>
 </body>
 </html>
