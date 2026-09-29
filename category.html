@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kategori - N-Doa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
+  <div class="max-w-md mx-auto">
+    <a href="index.html" class="inline-flex items-center text-emerald-700 text-sm font-semibold mb-4">
+      ← Kembali ke Dasbor Awal
+    </a>
+
+    <header class="mb-4">
+      <h1 id="cat-title" class="text-xl font-bold text-slate-800">...</h1>
+      <p id="cat-desc" class="text-slate-500 text-xs mt-1"></p>
+    </header>
+
+    <div id="submenu-list" class="space-y-2"></div>
+  </div>
+
+  <script type="module">
+    import { MENU_CATEGORIES } from './js/data-menu.js';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryId = urlParams.get('id');
+    const category = MENU_CATEGORIES.find(c => c.id === categoryId);
+
+    if (category) {
+      document.getElementById('cat-title').innerText = category.title;
+      document.getElementById('cat-desc').innerText = category.description;
+
+      const container = document.getElementById('submenu-list');
+      category.submenus.forEach(sub => {
+        const item = document.createElement('a');
+        item.href = `reader.html?category=${category.id}&sub=${sub.id}`;
+        item.className = "bg-white p-3.5 rounded-xl border border-slate-200 flex justify-between items-center hover:bg-emerald-50 transition";
+        item.innerHTML = `
+          <span class="text-sm font-medium text-slate-700">${sub.name}</span>
+          ${sub.hasInput ? '<span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">Input Nama</span>' : '<span class="text-slate-400 text-sm">→</span>'}
+        `;
+        container.appendChild(item);
+      });
+    } else {
+      document.getElementById('cat-title').innerText = "Kategori Tidak Ditemukan";
+    }
+  </script>
+</body>
+</html>

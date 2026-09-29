@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembaca Tawasul - N-Doa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
+  <div class="max-w-xl mx-auto pb-10">
+    <button onclick="history.back()" class="text-emerald-700 text-sm font-semibold mb-4 hover:underline">
+      ← Kembali
+    </button>
+
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-4">
+      <h1 id="page-title" class="text-xl font-bold text-emerald-800">Bacaan Tawasul Lengkap</h1>
+      <p class="text-xs text-slate-500 mt-1">Dapat diisi nama almarhum/ah yang akan didoakan secara realtime.</p>
+    </div>
+
+    <!-- FORM INPUT NAMA -->
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6">
+      <h2 class="font-bold text-sm text-slate-700 mb-3 border-b pb-2">📋 Daftar Nama Almarhum / Almarhumah (Poin 7)</h2>
+      <div id="input-container" class="space-y-3 mb-4"></div>
+      <div class="flex gap-2">
+        <button id="btn-add" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-2 rounded-lg font-semibold border">
+          + Tambah Nama
+        </button>
+        <button id="btn-save" type="button" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-lg font-semibold ml-auto transition">
+          Simpan & Update Tawasul
+        </button>
+      </div>
+    </div>
+
+    <!-- KONTEN TAWASUL -->
+    <div id="tawasul-content" class="space-y-6"></div>
+  </div>
+
+  <script type="module" src="./js/reader.js"></script>
+</body>
+</html>
