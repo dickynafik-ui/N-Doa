@@ -17,10 +17,10 @@
       <p id="description" class="text-slate-500 text-sm mt-1"></p>
     </header>
 
-    <!-- Form Khusus Kelola Ahli Kubur (Hanya Muncul di Tawasul) -->
+    <!-- Pengaturan Ahli Kubur (Otomatis Arab) -->
     <div id="custom-names-box" class="hidden bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-3">
       <h2 class="font-bold text-emerald-900 text-sm">⚙️ Pengaturan Ahli Kubur / Almarhum(ah)</h2>
-      <p class="text-xs text-emerald-700">Tambahkan atau sesuaikan nama almarhum/almarhumah keluarga Anda di bawah ini:</p>
+      <p class="text-xs text-emerald-700">Ketik nama dalam bahasa Latin, teks Arab akan tersusun secara otomatis:</p>
       
       <div id="names-list" class="space-y-2"></div>
 
@@ -42,7 +42,48 @@
     const categoryInfo = MENU_CATEGORIES.find(c => c.id === categoryId);
     let data = prayersData[categoryId];
 
-    // Simpan/Ambil Daftar Khusus Ahli Kubur dari LocalStorage jika ada
+    // Fungsi Transliterasi Otomatis dari Latin ke Arab
+    function latinToArabic(text) {
+      if (!text) return "";
+
+      const dictionary = {
+        'bin': 'بْنِ',
+        'binti': 'بِنْتِ',
+        'muhammad': 'مُحَمَّد',
+        'ahmad': 'أَحْمَد',
+        'ali': 'عَلِيّ',
+        'fatimah': 'فَاطِمَة',
+        'fitriah': 'فِطْرِيَّة',
+        'fitri': 'فِطْرِي',
+        'didi': 'دِيْدِي',
+        'carmadi': 'جَرْمَادِي',
+        'waskim': 'وَاسْكِمْ'
+      };
+
+      let words = text.trim().toLowerCase().split(/\s+/);
+      let arabicWords = words.map(word => {
+        if (dictionary[word]) {
+          return dictionary[word];
+        }
+
+        // Transliterasi standar per karakter jika tidak ada di kamus
+        return word
+          .replace(/kh/g, 'خ').replace(/gh/g, 'غ').replace(/sh/g, 'ش')
+          .replace(/sy/g, 'ش').replace(/th/g, 'ط').replace(/dz/g, 'ذ')
+          .replace(/a/g, 'َا').replace(/i/g, 'ِي').replace(/u/g, 'ُوْ')
+          .replace(/e/g, 'ِ').replace(/o/g, 'و')
+          .replace(/b/g, 'ب').replace(/c/g, 'ج').replace(/d/g, 'د')
+          .replace(/f/g, 'ف').replace(/g/g, 'غ').replace(/h/g, 'ه')
+          .replace(/j/g, 'ج').replace(/k/g, 'ك').replace(/l/g, 'ل')
+          .replace(/m/g, 'م').replace(/n/g, 'ن').replace(/p/g, 'ف')
+          .replace(/q/g, 'ق').replace(/r/g, 'ر').replace(/s/g, 'س')
+          .replace(/t/g, 'ت').replace(/v/g, 'ف').replace(/w/g, 'و')
+          .replace(/y/g, 'ي').replace(/z/g, 'ز');
+      });
+
+      return arabicWords.join(' ');
+    }
+
     let localPersons = JSON.parse(localStorage.getItem('custom_ahli_kubur')) || [
       { id: 1, section: "Khusus untuk Almarhum Ayahanda", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
       { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
@@ -71,16 +112,16 @@
       }
 
       data.items.forEach((item, index) => {
-        // Jika poin biasa (bukan khusus 7a/7b)
         if (item.type !== 'ahli_kubur') {
           container.appendChild(createCard(item));
         } else if (index === 6) { 
-          // Tempat menyisipkan seluruh nama ahli kubur yang ada di LocalStorage
           localPersons.forEach((person, idx) => {
             const isMale = person.gender === 'male';
+            const arName = person.arabic_name || latinToArabic(person.name);
+
             const arText = isMale 
-              ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${person.arabic_name}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
-              : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${person.arabic_name}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
+              ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${arName}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
+              : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${arName}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
 
             const latinText = isMale
               ? `Wa khushūshan ilā rūhi abīnā/akhīnal-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`
@@ -124,10 +165,13 @@
       localPersons.forEach((person, index) => {
         const itemEl = document.createElement('div');
         itemEl.className = "flex gap-2 items-center bg-white p-2 rounded-lg border border-slate-200 text-xs";
+        
+        const generatedArabic = latinToArabic(person.name);
+
         itemEl.innerHTML = `
           <input type="text" value="${person.section}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Keterangan (mis: Ayahanda)" class="w-1/3 p-1.5 border rounded">
-          <input type="text" value="${person.name}" onchange="updatePerson(${index}, 'name', this.value)" placeholder="Nama Latin (mis: Didi Carmadi bin Waskim)" class="w-1/3 p-1.5 border rounded">
-          <input type="text" value="${person.arabic_name}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="Nama Arab" class="w-1/3 p-1.5 border rounded text-right" dir="rtl">
+          <input type="text" value="${person.name}" onchange="updateNameAndArabic(${index}, this.value)" placeholder="Nama Latin (mis: Didi Carmadi bin Waskim)" class="w-1/2 p-1.5 border rounded">
+          <div class="w-1/3 p-1.5 bg-slate-50 border rounded text-right font-serif text-emerald-800 font-bold" dir="rtl">${generatedArabic}</div>
           <select onchange="updatePerson(${index}, 'gender', this.value)" class="p-1.5 border rounded">
             <option value="male" ${person.gender === 'male' ? 'selected' : ''}>L</option>
             <option value="female" ${person.gender === 'female' ? 'selected' : ''}>P</option>
@@ -137,6 +181,12 @@
         listEl.appendChild(itemEl);
       });
     }
+
+    window.updateNameAndArabic = (index, value) => {
+      localPersons[index].name = value;
+      localPersons[index].arabic_name = latinToArabic(value);
+      saveLocalPersons();
+    };
 
     window.updatePerson = (index, field, value) => {
       localPersons[index][field] = value;
@@ -153,8 +203,8 @@
         id: Date.now(),
         section: "Khusus Almarhum/ah",
         gender: "male",
-        name: "Nama Fulan bin Fulan",
-        arabic_name: "فلان بن فلان"
+        name: "Nama bin Fulan",
+        arabic_name: "Nama bin Fulan"
       });
       saveLocalPersons();
     });
