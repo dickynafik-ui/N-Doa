@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>N-Carmadi - Dasbor Utama</title>
+  <title>N-Carmadi - Mengenang Ayah dengan Doa</title>
 
   <!-- Google Font Aref Ruqaa -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,58 +20,87 @@
 
   <style>
     /* =========================================================
-       N-CARMADI - DASHBOARD OVERRIDE
-       Khusus untuk menjaga tampilan header/logo tetap konsisten
-       dengan halaman category.html
+       N-CARMADI
+       DASHBOARD UTAMA
        ========================================================= */
 
     .font-arabic {
       font-family: 'Aref Ruqaa', 'Traditional Arabic', 'Amiri', serif;
     }
 
-    /* Header Dashboard */
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
     .nc-dashboard-header {
       background: #ffffff;
+
       padding: 1rem;
+
       border-radius: 0.75rem;
+
       border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+      box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.05);
+
       text-align: center;
     }
 
     @media (min-width: 640px) {
+
       .nc-dashboard-header {
         padding: 1.25rem;
       }
+
     }
 
-    /* Area logo + nama aplikasi */
-    .nc-brand-wrapper {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 100% !important;
-      margin-bottom: 0.5rem !important;
-    }
 
     /* =========================================================
-       LOGO
-       Dipaksa 64 x 64 px agar tidak membesar karena output.css
+       LOGO + BRAND
        ========================================================= */
 
+    .nc-brand-wrapper {
+
+      display: flex !important;
+
+      flex-direction: column !important;
+
+      align-items: center !important;
+
+      justify-content: center !important;
+
+      width: 100% !important;
+
+      margin-bottom: 0.75rem !important;
+    }
+
+
+    /*
+     * LOGO
+     * Dipaksa 64 x 64 px agar tidak berubah
+     * akibat aturan CSS lain.
+     */
+
     .nc-app-logo {
+
       display: block !important;
 
       width: 64px !important;
+
       min-width: 64px !important;
+
       max-width: 64px !important;
 
       height: 64px !important;
+
       min-height: 64px !important;
+
       max-height: 64px !important;
 
       object-fit: contain !important;
+
       object-position: center !important;
 
       margin: 0 0 4px 0 !important;
@@ -79,13 +108,29 @@
       padding: 0 !important;
 
       flex: 0 0 64px !important;
+
+      position: static !important;
+
+      float: none !important;
+
+      transform: none !important;
     }
 
-    /* Nama aplikasi */
+
+    /* =========================================================
+       N-CARMADI
+       ========================================================= */
+
     .nc-brand-name {
+
       display: block !important;
 
+      margin: 0 !important;
+
+      padding: 0 !important;
+
       font-size: 0.75rem !important;
+
       line-height: 1rem !important;
 
       font-weight: 700 !important;
@@ -95,17 +140,22 @@
       letter-spacing: 0.1em !important;
 
       text-transform: uppercase !important;
-
-      margin: 0 !important;
-      padding: 0 !important;
     }
 
-    /* Judul utama */
-    .nc-dashboard-title {
+
+    /* =========================================================
+       JUDUL
+       "Mengenang Ayah dengan Doa"
+       ========================================================= */
+
+    .nc-memory-title {
+
       margin: 0 !important;
-      margin-top: 0.25rem !important;
+
+      margin-top: 0.5rem !important;
 
       font-size: 1.5rem !important;
+
       line-height: 2rem !important;
 
       font-weight: 700 !important;
@@ -113,38 +163,92 @@
       color: #1e293b !important;
     }
 
-    /* Deskripsi */
-    .nc-dashboard-description {
-      margin: 0.25rem 0 0 0 !important;
-
-      font-size: 0.875rem !important;
-      line-height: 1.25rem !important;
-
-      color: #64748b !important;
-    }
 
     /* =========================================================
-       JAGA AGAR GAMBAR TIDAK DIPAKSA MEMENUHI CONTAINER
+       NAMA ALMARHUM
        ========================================================= */
 
-    .nc-brand-wrapper img.nc-app-logo {
-      position: static !important;
-      float: none !important;
-      transform: none !important;
+    .nc-father-name {
+
+      margin: 0.35rem 0 0 0 !important;
+
+      padding: 0 !important;
+
+      font-size: 0.95rem !important;
+
+      line-height: 1.5rem !important;
+
+      font-weight: 600 !important;
+
+      color: #047857 !important;
+
+      letter-spacing: 0.01em;
     }
+
+
+    /* =========================================================
+       KALIMAT DOA
+       ========================================================= */
+
+    .nc-memory-description {
+
+      max-width: 520px;
+
+      margin: 0.5rem auto 0 auto !important;
+
+      padding: 0 0.5rem !important;
+
+      font-size: 0.875rem !important;
+
+      line-height: 1.5rem !important;
+
+      color: #64748b !important;
+
+      font-style: italic;
+    }
+
+
+    /* =========================================================
+       PEMISAH HALUS
+       ========================================================= */
+
+    .nc-header-divider {
+
+      width: 60px;
+
+      height: 1px;
+
+      margin: 0.9rem auto 0 auto;
+
+      background: #a7f3d0;
+    }
+
+
+    /* =========================================================
+       DAFTAR MENU
+       ========================================================= */
+
+    .nc-category-list {
+
+      margin-top: 1rem;
+    }
+
   </style>
 </head>
+
 
 <body class="bg-slate-100 text-slate-800 p-3 sm:p-4 min-h-screen">
 
   <div class="max-w-2xl mx-auto space-y-4">
 
+
     <!-- =====================================================
-         HEADER DASHBOARD
+         HEADER / IDENTITAS N-CARMADI
          ===================================================== -->
+
     <header class="nc-dashboard-header">
 
-      <!-- Logo dan nama aplikasi -->
+      <!-- Logo -->
       <div class="nc-brand-wrapper">
 
         <img
@@ -159,70 +263,108 @@
 
       </div>
 
-      <!-- Judul -->
-      <h1 class="nc-dashboard-title">
-        Doa &amp; Tawasul
+
+      <!-- Tema aplikasi -->
+      <h1 class="nc-memory-title">
+        Mengenang Ayah dengan Doa
       </h1>
 
-      <!-- Deskripsi -->
-      <p class="nc-dashboard-description">
-        Pilih menu di bawah ini untuk memulai
+
+      <!-- Nama almarhum -->
+      <p class="nc-father-name">
+        Didi Carmadi bin Waskim
       </p>
+
+
+      <!-- Kalimat penghormatan -->
+      <p class="nc-memory-description">
+        Semoga setiap doa yang dipanjatkan menjadi
+        cahaya, ampunan, dan kebaikan untuk Ayah tercinta.
+      </p>
+
+
+      <!-- Garis pemisah -->
+      <div class="nc-header-divider"></div>
 
     </header>
 
 
     <!-- =====================================================
          DAFTAR KATEGORI MENU
-         Tetap menggunakan sistem MENU_CATEGORIES
          ===================================================== -->
-    <div id="category-list" class="space-y-3"></div>
+
+    <div
+      id="category-list"
+      class="space-y-3 nc-category-list">
+    </div>
 
   </div>
 
 
   <!-- =======================================================
-       JAVASCRIPT DASHBOARD
+       JAVASCRIPT
        ======================================================= -->
+
   <script type="module">
 
     import { MENU_CATEGORIES } from './js/data-menu.js';
 
-    const container = document.getElementById('category-list');
+    const container =
+      document.getElementById('category-list');
 
 
     /*
      * Pastikan data menu tersedia
      */
-    if (container && Array.isArray(MENU_CATEGORIES)) {
+
+    if (
+      container &&
+      Array.isArray(MENU_CATEGORIES)
+    ) {
 
       MENU_CATEGORIES.forEach(cat => {
 
         /*
-         * Membuat link kategori
+         * Membuat kartu menu
          */
-        const card = document.createElement('a');
 
-        card.href = `category.html?id=${cat.id}`;
+        const card =
+          document.createElement('a');
+
 
         /*
-         * Desain kartu menu tetap sama
+         * Link menuju category
          */
+
+        card.href =
+          `category.html?id=${cat.id}`;
+
+
+        /*
+         * Desain kartu menu
+         * TIDAK DIUBAH dari kode sebelumnya
+         */
+
         card.className =
-          "bg-white p-4 rounded-xl shadow-sm " +
-          "hover:shadow-md border border-slate-200 " +
-          "flex items-center gap-4 transition cursor-pointer";
+          "bg-white p-4 rounded-xl " +
+          "shadow-sm hover:shadow-md " +
+          "border border-slate-200 " +
+          "flex items-center gap-4 " +
+          "transition cursor-pointer";
 
 
         /*
          * Isi kartu
          */
+
         card.innerHTML = `
+
           <div class="text-3xl bg-emerald-50 p-3 rounded-lg">
             ${cat.icon}
           </div>
 
           <div>
+
             <h2 class="text-base font-bold text-slate-800">
               ${cat.title}
             </h2>
@@ -230,13 +372,16 @@
             <p class="text-xs text-slate-500 mt-0.5">
               ${cat.description}
             </p>
+
           </div>
+
         `;
 
 
         /*
-         * Masukkan kartu ke dashboard
+         * Tambahkan ke dashboard
          */
+
         container.appendChild(card);
 
       });
