@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>N-Doa - Detail Kategori</title>
   
-  <!-- Import Google Font Aref Ruqaa (Gaya Riq'ah) -->
+  <!-- Import Google Font Arab Ringan & Jelas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="./output.css">
 
   <style>
     .font-arabic {
-      font-family: 'Aref Ruqaa', 'Traditional Arabic', 'Amiri', serif;
+      font-family: 'Amiri', 'Scheherazade New', 'Traditional Arabic', serif;
+      font-weight: 400;
     }
   </style>
 </head>
@@ -199,7 +200,7 @@
         <div class="flex justify-between items-center text-xs font-semibold text-emerald-700">
           <span class="bg-emerald-50 px-2.5 py-1 rounded-full">${headerText}</span>
         </div>
-        <p class="text-right text-2xl sm:text-3xl font-arabic font-bold leading-loose text-slate-800" dir="rtl">${(item.arabic || '').replace(/\n/g, '<br>')}</p>
+        <p class="text-right text-2xl sm:text-3xl font-arabic leading-loose text-slate-800" dir="rtl">${(item.arabic || '').replace(/\n/g, '<br>')}</p>
         <p class="text-xs sm:text-sm font-medium text-emerald-800 leading-relaxed">${(item.latin || '').replace(/\n/g, '<br>')}</p>
         ${item.translation ? `<p class="text-xs text-slate-600 italic border-t border-slate-100 pt-2">${item.translation}</p>` : ''}
         ${item.note ? `<p class="text-xs font-medium text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">${item.note}</p>` : ''}
@@ -241,7 +242,7 @@
             </div>
             <div>
               <label class="block text-[10px] text-slate-500 mb-0.5">Nama Arab (Dapat Disunting)</label>
-              <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="دِيْدِي جَرْمَادِي" class="w-full p-2 border rounded border-slate-300 text-right font-arabic font-bold text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
+              <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="دِيْدِي جَرْمَادِي" class="w-full p-2 border rounded border-slate-300 text-right font-arabic text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
             </div>
           </div>
         `;
