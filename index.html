@@ -21,15 +21,21 @@
 <body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
   <div class="max-w-md mx-auto">
     
-    <!-- Header Judul dengan Logo N-Carmadi yang Rapi -->
-    <header class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center my-6">
-      <div class="flex flex-col items-center justify-center mb-2">
-        <!-- Inline style dipasang untuk mengunci ukuran gambar agar tidak melebar -->
-        <img src="assets/logo.png" alt="Logo N-Carmadi" class="w-20 h-20 object-contain block mx-auto mb-2" style="max-width: 80px; max-height: 80px; width: 80px; height: 80px;">
-        <span class="text-xs font-bold text-emerald-700 tracking-widest uppercase">N-Carmadi</span>
+    <!-- Header Dasbor Persis Sesuai Desain Target -->
+    <header class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center my-6">
+      <div class="flex flex-col items-center justify-center">
+        <!-- Logo Kotak Presisi -->
+        <div class="w-16 h-16 mb-3 rounded-xl overflow-hidden shadow-sm flex items-center justify-center bg-slate-900">
+          <img src="assets/logo.png" alt="Logo N-Carmadi" class="w-full h-full object-cover">
+        </div>
+        
+        <!-- Label Sub-Brand Hijau -->
+        <span class="text-xs font-bold text-emerald-700 tracking-wider uppercase mb-1">N-CARMADI</span>
+        
+        <!-- Judul Utama & Deskripsi -->
+        <h1 class="text-2xl font-bold text-slate-900 mb-1">Doa & Tawasul</h1>
+        <p class="text-slate-500 text-xs">Pilih menu di bawah ini untuk memulai</p>
       </div>
-      <h1 class="text-xl font-bold text-slate-800">Doa & Tawasul</h1>
-      <p class="text-slate-500 text-xs mt-1">Pilih menu di bawah ini untuk memulai</p>
     </header>
 
     <div id="category-list" class="space-y-3"></div>
