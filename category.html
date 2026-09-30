@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>N-Doa & Tawasul</title>
+  <title>N-Carmadi - Doa & Tawasul</title>
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Font Arab Amiri & Aref Ruqaa untuk keterbacaan tinggi -->
+  <!-- Google Fonts: Font Arab Amiri & Aref Ruqaa -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
@@ -26,13 +26,19 @@
       ← Kembali ke Dasbor Awal
     </a>
 
-    <!-- Header Judul -->
-    <header class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+    <!-- Header Judul dengan Logo N-Carmadi -->
+    <header class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+      <div class="flex flex-col items-center justify-center mb-2">
+        <!-- Logo dari assets/logo.png -->
+        <img src="assets/logo.png" alt="Logo N-Carmadi" class="w-16 h-16 object-contain mb-1" id="app-logo">
+        <span class="text-xs font-bold text-emerald-700 tracking-widest uppercase">N-Carmadi</span>
+      </div>
+
       <h1 id="title" class="text-2xl font-bold text-slate-800"></h1>
       <p id="description" class="text-slate-500 text-sm mt-1"></p>
     </header>
 
-    <!-- Dropdown Doa Pilihan (jika kategori memuat listDoa) -->
+    <!-- Dropdown Doa Pilihan -->
     <div id="doa-selector" class="hidden bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
       <label for="doa-dropdown" class="block text-xs font-medium text-slate-600 mb-1">Pilih Doa:</label>
       <select id="doa-dropdown" class="w-full p-2 text-sm border rounded-lg border-slate-300 bg-white focus:ring-1 focus:ring-emerald-500 outline-none"></select>
@@ -173,7 +179,6 @@
             const isMale = person.gender === 'male';
             const arName = person.arabic_name || latinToArabic(person.name);
 
-            // Pengaturan sebutan/hubungan
             let arRelation = "";
             let latinRelation = "";
 
@@ -190,7 +195,6 @@
               arRelation = " أُخْتِنَا";
               latinRelation = " ukhtinā";
             } else {
-              // Jika umum / tanpa sebutan khusus
               arRelation = "";
               latinRelation = "";
             }
@@ -321,7 +325,7 @@
         localPersons.push({
           id: Date.now(),
           section: "Khusus Almarhum",
-          relation: "general", // Default ke Umum / Tanpa sebutan
+          relation: "general",
           gender: "male",
           name: "Nama bin Fulan",
           arabic_name: "فلان بن فلان"
