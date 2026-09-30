@@ -3,62 +3,247 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>N-Carmadi - Dasbor Utama</title>
-  
-  <!-- Import Google Font Aref Ruqaa (Gaya Riq'ah) -->
+
+  <!-- Google Font Aref Ruqaa -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-  
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS utama aplikasi -->
   <link rel="stylesheet" href="./output.css">
-  
+
   <style>
+    /* =========================================================
+       N-CARMADI - DASHBOARD OVERRIDE
+       Khusus untuk menjaga tampilan header/logo tetap konsisten
+       dengan halaman category.html
+       ========================================================= */
+
     .font-arabic {
       font-family: 'Aref Ruqaa', 'Traditional Arabic', 'Amiri', serif;
     }
+
+    /* Header Dashboard */
+    .nc-dashboard-header {
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .nc-dashboard-header {
+        padding: 1.25rem;
+      }
+    }
+
+    /* Area logo + nama aplikasi */
+    .nc-brand-wrapper {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    /* =========================================================
+       LOGO
+       Dipaksa 64 x 64 px agar tidak membesar karena output.css
+       ========================================================= */
+
+    .nc-app-logo {
+      display: block !important;
+
+      width: 64px !important;
+      min-width: 64px !important;
+      max-width: 64px !important;
+
+      height: 64px !important;
+      min-height: 64px !important;
+      max-height: 64px !important;
+
+      object-fit: contain !important;
+      object-position: center !important;
+
+      margin: 0 0 4px 0 !important;
+
+      padding: 0 !important;
+
+      flex: 0 0 64px !important;
+    }
+
+    /* Nama aplikasi */
+    .nc-brand-name {
+      display: block !important;
+
+      font-size: 0.75rem !important;
+      line-height: 1rem !important;
+
+      font-weight: 700 !important;
+
+      color: #047857 !important;
+
+      letter-spacing: 0.1em !important;
+
+      text-transform: uppercase !important;
+
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Judul utama */
+    .nc-dashboard-title {
+      margin: 0 !important;
+      margin-top: 0.25rem !important;
+
+      font-size: 1.5rem !important;
+      line-height: 2rem !important;
+
+      font-weight: 700 !important;
+
+      color: #1e293b !important;
+    }
+
+    /* Deskripsi */
+    .nc-dashboard-description {
+      margin: 0.25rem 0 0 0 !important;
+
+      font-size: 0.875rem !important;
+      line-height: 1.25rem !important;
+
+      color: #64748b !important;
+    }
+
+    /* =========================================================
+       JAGA AGAR GAMBAR TIDAK DIPAKSA MEMENUHI CONTAINER
+       ========================================================= */
+
+    .nc-brand-wrapper img.nc-app-logo {
+      position: static !important;
+      float: none !important;
+      transform: none !important;
+    }
   </style>
 </head>
+
 <body class="bg-slate-100 text-slate-800 p-3 sm:p-4 min-h-screen">
+
   <div class="max-w-2xl mx-auto space-y-4">
-    
-    <!-- Header Dasbor (Ukuran disamakan persis dengan halaman isi) -->
-    <header class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm text-center">
-      <div class="flex flex-col items-center justify-center mb-2">
-        <!-- Logo N-Carmadi ukuran kecil & presisi -->
-        <img src="assets/logo.png" alt="Logo N-Carmadi" class="w-16 h-16 object-contain mb-1">
-        
-        <!-- Label Sub-Brand Hijau -->
-        <span class="text-xs font-bold text-emerald-700 tracking-widest uppercase">N-Carmadi</span>
+
+    <!-- =====================================================
+         HEADER DASHBOARD
+         ===================================================== -->
+    <header class="nc-dashboard-header">
+
+      <!-- Logo dan nama aplikasi -->
+      <div class="nc-brand-wrapper">
+
+        <img
+          src="assets/logo.png"
+          alt="Logo N-Carmadi"
+          class="nc-app-logo"
+        >
+
+        <span class="nc-brand-name">
+          N-Carmadi
+        </span>
+
       </div>
-      
-      <!-- Judul Utama & Deskripsi -->
-      <h1 class="text-2xl font-bold text-slate-800">Doa & Tawasul</h1>
-      <p class="text-slate-500 text-sm mt-1">Pilih menu di bawah ini untuk memulai</p>
+
+      <!-- Judul -->
+      <h1 class="nc-dashboard-title">
+        Doa &amp; Tawasul
+      </h1>
+
+      <!-- Deskripsi -->
+      <p class="nc-dashboard-description">
+        Pilih menu di bawah ini untuk memulai
+      </p>
+
     </header>
 
-    <!-- Daftar Kategori Menu -->
+
+    <!-- =====================================================
+         DAFTAR KATEGORI MENU
+         Tetap menggunakan sistem MENU_CATEGORIES
+         ===================================================== -->
     <div id="category-list" class="space-y-3"></div>
+
   </div>
 
+
+  <!-- =======================================================
+       JAVASCRIPT DASHBOARD
+       ======================================================= -->
   <script type="module">
+
     import { MENU_CATEGORIES } from './js/data-menu.js';
+
     const container = document.getElementById('category-list');
-    
+
+
+    /*
+     * Pastikan data menu tersedia
+     */
     if (container && Array.isArray(MENU_CATEGORIES)) {
+
       MENU_CATEGORIES.forEach(cat => {
+
+        /*
+         * Membuat link kategori
+         */
         const card = document.createElement('a');
+
         card.href = `category.html?id=${cat.id}`;
-        card.className = "bg-white p-4 rounded-xl shadow-sm hover:shadow-md border border-slate-200 flex items-center gap-4 transition cursor-pointer";
+
+        /*
+         * Desain kartu menu tetap sama
+         */
+        card.className =
+          "bg-white p-4 rounded-xl shadow-sm " +
+          "hover:shadow-md border border-slate-200 " +
+          "flex items-center gap-4 transition cursor-pointer";
+
+
+        /*
+         * Isi kartu
+         */
         card.innerHTML = `
-          <div class="text-3xl bg-emerald-50 p-3 rounded-lg">${cat.icon}</div>
+          <div class="text-3xl bg-emerald-50 p-3 rounded-lg">
+            ${cat.icon}
+          </div>
+
           <div>
-            <h2 class="text-base font-bold text-slate-800">${cat.title}</h2>
-            <p class="text-xs text-slate-500 mt-0.5">${cat.description}</p>
+            <h2 class="text-base font-bold text-slate-800">
+              ${cat.title}
+            </h2>
+
+            <p class="text-xs text-slate-500 mt-0.5">
+              ${cat.description}
+            </p>
           </div>
         `;
+
+
+        /*
+         * Masukkan kartu ke dashboard
+         */
         container.appendChild(card);
+
       });
+
     }
+
   </script>
+
 </body>
 </html>
