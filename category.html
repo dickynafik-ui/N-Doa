@@ -4,7 +4,8 @@
   const urlParams = new URLSearchParams(window.location.search);
   let categoryId = urlParams.get('id');
 
-  if (categoryId === 'doa') {
+  // Normalisasi id jika berupa 'doa' atau mengandung parameter lain
+  if (categoryId === 'doa' || categoryId?.startsWith('doa:')) {
     categoryId = 'doa_pilihan';
   }
 
@@ -35,28 +36,37 @@
   }
 
   function renderContent() {
-    // Ambil data dinamis berdasarkan categoryId
-    const categoryInfo = MENU_CATEGORIES.find(c => c.id === categoryId);
-    const data = prayersData[categoryId];
+    const categoryInfo = MENU_CATEGORIES?.find(c => c.id === categoryId);
+    const data = prayersData?.[categoryId];
 
+    const titleEl = document.getElementById('title');
+    const descEl = document.getElementById('description');
+    const container = document.getElementById('content-list');
+
+    // Mencegah error jika elemen tidak ditemukan di HTML
     if (!data) {
-      document.getElementById('title').innerText = "Data tidak ditemukan";
+      if (titleEl) titleEl.innerText = "Data tidak ditemukan";
       return;
     }
 
-    document.getElementById('title').innerText = data.title;
-    document.getElementById('description').innerText = categoryInfo ? categoryInfo.description : '';
+    if (titleEl) titleEl.innerText = data.title || '';
+    if (descEl) descEl.innerText = categoryInfo ? categoryInfo.description : '';
 
-    const container = document.getElementById('content-list');
+    if (!container) {
+      console.error("Elemen dengan id 'content-list' tidak ditemukan di HTML!");
+      return;
+    }
+
     container.innerHTML = '';
 
-    if (categoryId === 'tawasul' || categoryId === 'doa_pilihan' || categoryId === 'doa') {
-      const box = document.getElementById('custom-names-box');
-      if (box) box.classList.remove('hidden');
-      renderCustomNamesManager();
-    } else {
-      const box = document.getElementById('custom-names-box');
-      if (box) box.classList.add('hidden');
+    const box = document.getElementById('custom-names-box');
+    if (box) {
+      if (categoryId === 'tawasul' || categoryId === 'doa_pilihan' || categoryId === 'doa') {
+        box.classList.remove('hidden');
+        renderCustomNamesManager();
+      } else {
+        box.classList.add('hidden');
+      }
     }
 
     // 1. Tampilkan jika data berupa list biasa (Surah Yasin / Tawasul)
@@ -71,18 +81,20 @@
       const dropdown = document.getElementById('doa-dropdown');
       if (selectorBox) selectorBox.classList.remove('hidden');
 
-      dropdown.innerHTML = data.listDoa.map((d, i) => `<option value="${i}">${d.title}</option>`).join('');
+      if (dropdown) {
+        dropdown.innerHTML = data.listDoa.map((d, i) => `<option value="${i}">${d.title}</option>`).join('');
 
-      function displaySelectedDoa(index) {
-        container.innerHTML = '';
-        const selected = data.listDoa[index];
-        if (selected && selected.items) {
-          renderItems(selected.items, container);
+        function displaySelectedDoa(index) {
+          container.innerHTML = '';
+          const selected = data.listDoa[index];
+          if (selected && selected.items) {
+            renderItems(selected.items, container);
+          }
         }
-      }
 
-      dropdown.onchange = (e) => displaySelectedDoa(e.target.value);
-      displaySelectedDoa(0);
+        dropdown.onchange = (e) => displaySelectedDoa(e.target.value);
+        displaySelectedDoa(0);
+      }
     }
   }
 
