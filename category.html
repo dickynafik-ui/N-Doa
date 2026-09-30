@@ -4,7 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>N-Doa - Detail Kategori</title>
+  
+  <!-- Import Google Font Aref Ruqaa (Gaya Riq'ah) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="./output.css">
+
+  <style>
+    .font-arabic {
+      font-family: 'Aref Ruqaa', 'Traditional Arabic', 'Amiri', serif;
+    }
+  </style>
 </head>
 <body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
   <div class="max-w-xl mx-auto space-y-4">
@@ -20,17 +32,17 @@
       </div>
     </header>
 
-    <!-- Dropdown Doa Pilihan (Jika Kategori Memiliki Sub-menu) -->
+    <!-- Dropdown Doa Pilihan -->
     <div id="doa-selector" class="hidden bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
       <label for="doa-dropdown" class="block text-xs font-medium text-slate-600 mb-1">Pilih Doa:</label>
       <select id="doa-dropdown" class="w-full p-2 text-sm border rounded-lg border-slate-300 bg-white focus:ring-1 focus:ring-emerald-500 outline-none"></select>
     </div>
 
-    <!-- Manager Nama Ahli Kubur (Custom Names) -->
+    <!-- Manager Nama Ahli Kubur -->
     <div id="custom-names-box" class="hidden bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
       <div class="flex justify-between items-center border-b pb-2 border-slate-100">
         <h3 class="text-xs font-bold text-slate-700">Pengaturan Nama Ahli Kubur</h3>
-        <button id="add-person-btn" class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition">
+        <button id="add-person-btn" class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition cursor-pointer">
           + Tambah Nama
         </button>
       </div>
@@ -48,7 +60,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     let categoryId = urlParams.get('id');
 
-    // Normalisasi id jika berupa 'doa' atau mengandung parameter lain
     if (categoryId === 'doa' || categoryId?.startsWith('doa:')) {
       categoryId = 'doa_pilihan';
     }
@@ -208,7 +219,7 @@
         itemEl.innerHTML = `
           <div class="flex justify-between items-center border-b pb-1.5 border-slate-100">
             <span class="font-bold text-slate-700">Data #${index + 1}</span>
-            <button onclick="deletePerson(${index})" class="text-red-500 font-semibold text-xs hover:text-red-700 bg-red-50 px-2 py-0.5 rounded">Hapus</button>
+            <button onclick="deletePerson(${index})" class="text-red-500 font-semibold text-xs hover:text-red-700 bg-red-50 px-2 py-0.5 rounded cursor-pointer">Hapus</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
