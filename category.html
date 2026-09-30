@@ -8,9 +8,6 @@
     categoryId = 'doa_pilihan';
   }
 
-  const categoryInfo = MENU_CATEGORIES.find(c => c.id === categoryId);
-  let data = prayersData[categoryId];
-
   function latinToArabic(text) {
     if (!text) return "";
     const dictionary = {
@@ -38,6 +35,10 @@
   }
 
   function renderContent() {
+    // Ambil data dinamis berdasarkan categoryId
+    const categoryInfo = MENU_CATEGORIES.find(c => c.id === categoryId);
+    const data = prayersData[categoryId];
+
     if (!data) {
       document.getElementById('title').innerText = "Data tidak ditemukan";
       return;
@@ -49,7 +50,7 @@
     const container = document.getElementById('content-list');
     container.innerHTML = '';
 
-    if (categoryId === 'tawasul' || categoryId === 'doa_pilihan') {
+    if (categoryId === 'tawasul' || categoryId === 'doa_pilihan' || categoryId === 'doa') {
       const box = document.getElementById('custom-names-box');
       if (box) box.classList.remove('hidden');
       renderCustomNamesManager();
