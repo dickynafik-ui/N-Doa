@@ -1,4 +1,4 @@
-export const doaYasin = {
+export const doaYasinData = {
   id: "doa-yasin",
   title: "Doa Setelah Yasin (Praktis)",
   category: "doa_pilihan",
