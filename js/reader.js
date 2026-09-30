@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import { doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Data default awal jika Firebase belum terisi
+// Data default awal jika Firebase belum terisi / offline
 let listArwah = [
   { nama: "Didi Carmadi bin Waskim", gender: "L" },
   { nama: "Fitriah binti Didi Carmadi", gender: "P" }
@@ -12,76 +12,111 @@ const btnAdd = document.getElementById('btn-add');
 const btnSave = document.getElementById('btn-save');
 const tawasulContent = document.getElementById('tawasul-content');
 
+// Helper untuk mencegah serangan XSS saat menampilkan teks ke innerHTML
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[m]);
+}
+
+// Sinkronkan nilai dari DOM input kembali ke variabel listArwah
+function syncInputsToMemory() {
+  if (!inputContainer) return;
+  const rowsNama = inputContainer.querySelectorAll('.input-nama');
+  const rowsGender = inputContainer.querySelectorAll('.input-gender');
+
+  listArwah = [];
+  rowsNama.forEach((input, i) => {
+    listArwah.push({
+      nama: input.value.trim(),
+      gender: rowsGender[i] ? rowsGender[i].value : 'L'
+    });
+  });
+}
+
 // Render input form nama almarhum/ah
 function renderInputFields(data) {
   if (!inputContainer) return;
   inputContainer.innerHTML = '';
+  
   data.forEach((item, index) => {
     const row = document.createElement('div');
     row.className = "flex gap-2 items-center bg-slate-50 p-2 rounded-lg border";
     row.innerHTML = `
-      <input type="text" class="input-nama w-full p-1.5 text-sm border rounded bg-white" value="${item.nama}" placeholder="Nama & Bin/Binti">
+      <input type="text" class="input-nama w-full p-1.5 text-sm border rounded bg-white" value="${escapeHtml(item.nama)}" placeholder="Nama & Bin/Binti">
       <select class="input-gender p-1.5 text-xs border rounded bg-white">
         <option value="L" ${item.gender === 'L' ? 'selected' : ''}>L (Bin)</option>
         <option value="P" ${item.gender === 'P' ? 'selected' : ''}>P (Binti)</option>
       </select>
-      <button type="button" class="text-red-500 font-bold px-2 text-sm" onclick="hapusRow(${index})">✕</button>
+      <button type="button" class="btn-hapus text-red-500 font-bold px-2 text-sm hover:bg-red-50 rounded" data-index="${index}">✕</button>
     `;
     inputContainer.appendChild(row);
+  });
+}
+
+// Event Delegation untuk Hapus Row (Lebih aman dari inline onclick)
+if (inputContainer) {
+  inputContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-hapus')) {
+      syncInputsToMemory();
+      const index = parseInt(e.target.getAttribute('data-index'), 10);
+      listArwah.splice(index, 1);
+      renderInputFields(listArwah);
+    }
   });
 }
 
 // Tambah baris nama baru
 if (btnAdd) {
   btnAdd.addEventListener('click', () => {
+    syncInputsToMemory();
     listArwah.push({ nama: "", gender: "L" });
     renderInputFields(listArwah);
   });
 }
 
-// Hapus baris nama
-window.hapusRow = function(index) {
-  listArwah.splice(index, 1);
-  renderInputFields(listArwah);
-};
-
 // Simpan data ke Firestore secara Realtime
 if (btnSave) {
   btnSave.addEventListener('click', async () => {
-    const rowsNama = document.querySelectorAll('.input-nama');
-    const rowsGender = document.querySelectorAll('.input-gender');
-    
-    const updatedList = [];
-    rowsNama.forEach((input, i) => {
-      if (input.value.trim() !== "") {
-        updatedList.push({
-          nama: input.value.trim(),
-          gender: rowsGender[i].value
-        });
-      }
-    });
+    syncInputsToMemory();
+
+    // Filter nama yang tidak kosong
+    const updatedList = listArwah.filter(item => item.nama !== "");
 
     if (updatedList.length === 0) {
-      alert("Masukkan setidaknya 1 nama!");
+      alert("Masukkan setidaknya 1 nama almarhum/ah!");
       return;
     }
 
     try {
+      btnSave.disabled = true;
+      btnSave.innerText = "Menyimpan...";
+
       await setDoc(doc(db, "tawasul", "sesi_aktif"), {
         daftarNama: updatedList,
         updatedAt: new Date()
       });
+
       alert("Data Tawasul Berhasil Diperbarui!");
     } catch (err) {
       console.error("Gagal menyimpan ke Firebase:", err);
       alert("Gagal menyimpan data ke Firebase. Pastikan Security Rules Firestore sudah di-Publish!");
+    } finally {
+      btnSave.disabled = false;
+      btnSave.innerText = "Simpan";
     }
   });
 }
 
 // Generate Poin 7 (Khusus Nama Almarhum/ah secara dinamis)
 function generatePoinKhusus(daftar) {
-  if (!daftar || daftar.length === 0) return '<p class="text-red-500 text-sm">Belum ada nama yang dimasukkan.</p>';
+  if (!daftar || daftar.length === 0) {
+    return '<p class="text-red-500 text-sm italic">Belum ada nama almarhum/ah yang dimasukkan.</p>';
+  }
 
   return daftar.map((item, idx) => {
     const isLaki = item.gender === 'L';
@@ -89,19 +124,21 @@ function generatePoinKhusus(daftar) {
     const doaLengkapArab = isLaki 
       ? `اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ`
       : `اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا`;
-    
+
     const latinDoa = isLaki
       ? `Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū`
       : `Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā`;
+
+    const namaClean = escapeHtml(item.nama);
 
     return `
       <div class="mb-4 p-3 bg-amber-100/50 rounded-lg border border-amber-200">
         <p class="text-xs font-semibold text-amber-900 mb-2">Khusus Almarhum/ah ke-${idx + 1}:</p>
         <p class="text-right text-xl font-serif leading-loose text-slate-900" dir="rtl">
-          وَخُصُوْصًا إِلَى رُوْحِ ${dhomirMaghfur} <span class="text-emerald-700 font-bold">${item.nama}</span>. ${doaLengkapArab}، الْفَاتِحَةُ...
+          وَخُصُوْصًا إِلَى رُوْحِ ${dhomirMaghfur} <span class="text-emerald-700 font-bold">${namaClean}</span>. ${doaLengkapArab}، الْفَاتِحَةُ...
         </p>
         <p class="text-xs text-slate-600 mt-2 italic leading-relaxed">
-          (Wa khushūshan ilā rūhi ${isLaki ? 'al-maghfūr lah' : 'al-maghfūr lahā'} <b>${item.nama}</b>. ${latinDoa}, Al-Fātiḥah...)
+          (Wa khushūshan ilā rūhi ${isLaki ? 'al-maghfūr lah' : 'al-maghfūr lahā'} <b>${namaClean}</b>. ${latinDoa}, Al-Fātiḥah...)
         </p>
         <p class="text-xs text-emerald-800 font-medium mt-1">👉 (Jamaah membaca Al-Fatihah 1x)</p>
       </div>
@@ -190,17 +227,19 @@ function renderTawasulView(daftarNama) {
   `;
 }
 
-// Mendengarkan perubahan data Firestore secara Realtime
-try {
-  onSnapshot(doc(db, "tawasul", "sesi_aktif"), (docSnap) => {
+// Mendengarkan perubahan data Firestore secara Realtime dengan penanganan Error Callback
+onSnapshot(
+  doc(db, "tawasul", "sesi_aktif"), 
+  (docSnap) => {
     if (docSnap.exists() && docSnap.data().daftarNama) {
       listArwah = docSnap.data().daftarNama;
     }
     renderInputFields(listArwah);
     renderTawasulView(listArwah);
-  });
-} catch (e) {
-  console.warn("Melihat tampilan offline / fallback mode:", e);
-  renderInputFields(listArwah);
-  renderTawasulView(listArwah);
-}
+  }, 
+  (error) => {
+    console.warn("Melihat tampilan offline / fallback mode:", error);
+    renderInputFields(listArwah);
+    renderTawasulView(listArwah);
+  }
+);
