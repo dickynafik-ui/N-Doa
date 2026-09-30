@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>N-Doa - Dasbor Utama</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./output.css">
 </head>
 <body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
   <div class="max-w-md mx-auto">
@@ -20,19 +20,21 @@
     import { MENU_CATEGORIES } from './js/data-menu.js';
     const container = document.getElementById('category-list');
     
-    MENU_CATEGORIES.forEach(cat => {
-      const card = document.createElement('a');
-      card.href = `category.html?id=${cat.id}`;
-      card.className = "bg-white p-4 rounded-xl shadow-sm hover:shadow-md border border-slate-200 flex items-center gap-4 transition cursor-pointer";
-      card.innerHTML = `
-        <div class="text-3xl bg-emerald-50 p-3 rounded-lg">${cat.icon}</div>
-        <div>
-          <h2 class="text-base font-bold text-slate-800">${cat.title}</h2>
-          <p class="text-xs text-slate-500 mt-0.5">${cat.description}</p>
-        </div>
-      `;
-      container.appendChild(card);
-    });
+    if (container && Array.isArray(MENU_CATEGORIES)) {
+      MENU_CATEGORIES.forEach(cat => {
+        const card = document.createElement('a');
+        card.href = `category.html?id=${cat.id}`;
+        card.className = "bg-white p-4 rounded-xl shadow-sm hover:shadow-md border border-slate-200 flex items-center gap-4 transition cursor-pointer";
+        card.innerHTML = `
+          <div class="text-3xl bg-emerald-50 p-3 rounded-lg">${cat.icon}</div>
+          <div>
+            <h2 class="text-base font-bold text-slate-800">${cat.title}</h2>
+            <p class="text-xs text-slate-500 mt-0.5">${cat.description}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
   </script>
 </body>
 </html>

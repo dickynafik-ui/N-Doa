@@ -1,234 +1,274 @@
-<script type="module">
-  import { prayersData, MENU_CATEGORIES } from './js/data-menu.js';
-
-  const urlParams = new URLSearchParams(window.location.search);
-  let categoryId = urlParams.get('id');
-
-  // Normalisasi id jika berupa 'doa' atau mengandung parameter lain
-  if (categoryId === 'doa' || categoryId?.startsWith('doa:')) {
-    categoryId = 'doa_pilihan';
-  }
-
-  function latinToArabic(text) {
-    if (!text) return "";
-    const dictionary = {
-      'bin': 'بْنِ', 'binti': 'بِنْتِ', 'didi': 'دِيْدِي', 'carmadi': 'جَرْمَادِي',
-      'waskim': 'وَاسْكِمْ', 'fitriah': 'فِطْرِيَّة', 'fitri': 'فِطْرِي'
-    };
-    let words = text.trim().toLowerCase().split(/\s+/);
-    return words.map(word => dictionary[word] || word
-      .replace(/kh/g, 'خ').replace(/gh/g, 'غ').replace(/sh/g, 'ش').replace(/sy/g, 'ش')
-      .replace(/a/g, 'َا').replace(/i/g, 'ِي').replace(/u/g, 'ُوْ').replace(/b/g, 'ب')
-      .replace(/d/g, 'د').replace(/f/g, 'ف').replace(/j/g, 'ج').replace(/k/g, 'ك')
-      .replace(/l/g, 'ل').replace(/m/g, 'م').replace(/n/g, 'ن').replace(/r/g, 'ر')
-      .replace(/s/g, 'س').replace(/t/g, 'ت').replace(/w/g, 'و').replace(/y/g, 'ي')
-    ).join(' ');
-  }
-
-  let localPersons = JSON.parse(localStorage.getItem('custom_ahli_kubur')) || [
-    { id: 1, section: "Khusus untuk Almarhum Ayahanda", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
-    { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
-  ];
-
-  function saveLocalPersons() {
-    localStorage.setItem('custom_ahli_kubur', JSON.stringify(localPersons));
-    renderContent();
-  }
-
-  function renderContent() {
-    const categoryInfo = MENU_CATEGORIES?.find(c => c.id === categoryId);
-    const data = prayersData?.[categoryId];
-
-    const titleEl = document.getElementById('title');
-    const descEl = document.getElementById('description');
-    const container = document.getElementById('content-list');
-
-    // Mencegah error jika elemen tidak ditemukan di HTML
-    if (!data) {
-      if (titleEl) titleEl.innerText = "Data tidak ditemukan";
-      return;
-    }
-
-    if (titleEl) titleEl.innerText = data.title || '';
-    if (descEl) descEl.innerText = categoryInfo ? categoryInfo.description : '';
-
-    if (!container) {
-      console.error("Elemen dengan id 'content-list' tidak ditemukan di HTML!");
-      return;
-    }
-
-    container.innerHTML = '';
-
-    const box = document.getElementById('custom-names-box');
-    if (box) {
-      if (categoryId === 'tawasul' || categoryId === 'doa_pilihan' || categoryId === 'doa') {
-        box.classList.remove('hidden');
-        renderCustomNamesManager();
-      } else {
-        box.classList.add('hidden');
-      }
-    }
-
-    // 1. Tampilkan jika data berupa list biasa (Surah Yasin / Tawasul)
-    if (data.items) {
-      const selectorBox = document.getElementById('doa-selector');
-      if (selectorBox) selectorBox.classList.add('hidden');
-      renderItems(data.items, container);
-    } 
-    // 2. Tampilkan jika data berupa modul dropdown (Doa-Doa Pilihan)
-    else if (data.listDoa && data.listDoa.length > 0) {
-      const selectorBox = document.getElementById('doa-selector');
-      const dropdown = document.getElementById('doa-dropdown');
-      if (selectorBox) selectorBox.classList.remove('hidden');
-
-      if (dropdown) {
-        dropdown.innerHTML = data.listDoa.map((d, i) => `<option value="${i}">${d.title}</option>`).join('');
-
-        function displaySelectedDoa(index) {
-          container.innerHTML = '';
-          const selected = data.listDoa[index];
-          if (selected && selected.items) {
-            renderItems(selected.items, container);
-          }
-        }
-
-        dropdown.onchange = (e) => displaySelectedDoa(e.target.value);
-        displaySelectedDoa(0);
-      }
-    }
-  }
-
-  function renderItems(items, container) {
-    items.forEach((item) => {
-      if (item.type !== 'ahli_kubur') {
-        container.appendChild(createCard(item));
-      } else {
-        localPersons.forEach((person, idx) => {
-          const isMale = person.gender === 'male';
-          const arName = person.arabic_name || latinToArabic(person.name);
-
-          let arText = "";
-          let latinText = "";
-
-          if (categoryId === 'tawasul') {
-            arText = isMale 
-              ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${arName}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
-              : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${arName}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
-
-            latinText = isMale
-              ? `Wa khushūshan ilā rūhi abīnā/akhīnal-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`
-              : `Wa khushūshan ilā rūhi umminā/ukhtinal-maghfūr lahā ${person.name}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...`;
-          } else {
-            arText = isMale 
-              ? `اَللّٰهُمَّ خُصُوْصًا إِلَى رُوْحِ ${arName}\n\nاَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ. وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ. وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ. وَنَقِّهِ مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ.\n\nاَللّٰهُمَّ أَنْزِلِ الرَّحْمَةَ وَالْمَغْفِرَةَ عَلَى قَبْرِهِ. وَاجْعَلْ قَبْرَهُ رَوْضَةً مِنْ رِيَاضِ الْجَنَّةِ، وَلَا تَجْعَلْ قَبْرَهُ حُفْرَةً مِنْ حُفَرِ النِّيْرَانِ. اَللّٰهُمَّ جَازِهِ بِالْإِحْسَانِ إِحْسَانًا، وَبِالسَّيِّئَاتِ عَفْوًا وَغُفْرَانًا.`
-              : `اَللّٰهُمَّ خُصُوْصًا إِلَى رُوْحِ ${arName}\n\nاَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا. وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا. وَاغْسِلْهَا بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ. وَنَقِّهَا مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ.\n\nاَللّٰهُمَّ أَنْزِلِ الرَّحْمَةَ وَالْمَغْفِرَةَ عَلَى قَبْرِهَا. وَاجْعَلْ قَبْرَهَا رَوْضَةً مِنْ رِيَاضِ الْجَنَّةِ، وَلَا تَجْعَلْ قَبْرَهَا حُفْرَةً مِنْ حُفَرِ النِّيْرَانِ. اَللّٰهُمَّ جَازِهَا بِالْإِحْسَانِ إِحْسَانًا، وَبِالسَّيِّئَاتِ عَفْوًا وَغُفْرَانًا.`;
-
-            latinText = isMale
-              ? `Allāhumma khushūshan ilā rūhi ${person.name}\n\nAllāhummaghfir lahū, / warhamhū, / wa 'āfihī, / wa'fu 'anhū. / Wa akrim nuzulahū, / wa wassi' madkhalahū. / Waghsilhu bil-mā'i / wats-tsalji / wal-barad. / Wa naqqihī minal-khathāyā / kamā yunaqqats-tsaubul-abyadhu / minad-danas.\n\nAllāhumma anzilir-rahmata / wal-maghfirata / 'alā qabrihī. / Waj'al qabrahū / raudhatan min riyādhil-jannah. / Wa lā taj'al qabrahū / hufratan min hufarin-nīrān. / Allāhumma jāzihī bil-ihsāni ihsānā, / wa bis-sayyi'āti / 'afwan wa ghufrānā.`
-              : `Allāhumma khushūshan ilā rūhi ${person.name}\n\nAllāhummaghfir lahā, / warhamhā, / wa 'āfihā, / wa'fu 'anhā. / Wa akrim nuzulahā, / wa wassi' madkhalahā. / Waghsilhā bil-mā'i / wats-tsalji / wal-barad. / Wa naqqihā minal-khathāyā / kamā yunaqqats-tsaubul-abyadhu / minad-danas.\n\nAllāhumma anzilir-rahmata / wal-maghfirata / 'alā qabrihā. / Waj'al qabrahā / raudhatan min riyādhil-jannah. / Wa lā taj'al qabrahā / hufratan min hufarin-nīrān. / Allāhumma jāzihā bil-ihsāni ihsānā, / wa bis-sayyi'āti / 'afwan wa ghufrānā.`;
-          }
-
-          const customCardData = {
-            number: `${item.number || '3'}${String.fromCharCode(97 + idx)}`,
-            section: person.section,
-            arabic: arText,
-            latin: latinText
-          };
-          container.appendChild(createCard(customCardData));
-        });
-      }
-    });
-  }
-
-  function createCard(item) {
-    const card = document.createElement('div');
-    card.className = "bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N-Doa - Detail Kategori</title>
+  <link rel="stylesheet" href="./output.css">
+</head>
+<body class="bg-slate-100 text-slate-800 p-4 min-h-screen">
+  <div class="max-w-xl mx-auto space-y-4">
     
-    let headerText = item.section ? `${item.number ? item.number + '. ' : ''}${item.section}` : `Ayat / Bacaan #${item.number || ''}`;
-
-    card.innerHTML = `
-      <div class="flex justify-between items-center text-xs font-semibold text-emerald-700">
-        <span class="bg-emerald-50 px-2.5 py-1 rounded-full">${headerText}</span>
+    <!-- Header Navigasi -->
+    <header class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+      <a href="index.html" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition">
+        ← Kembali
+      </a>
+      <div class="text-right">
+        <h1 id="title" class="text-lg font-bold text-slate-800"></h1>
+        <p id="description" class="text-xs text-slate-500"></p>
       </div>
-      <p class="text-right text-2xl sm:text-3xl font-arabic font-bold leading-loose text-slate-800" dir="rtl">${(item.arabic || '').replace(/\n/g, '<br>')}</p>
-      <p class="text-xs sm:text-sm font-medium text-emerald-800 leading-relaxed">${(item.latin || '').replace(/\n/g, '<br>')}</p>
-      ${item.translation ? `<p class="text-xs text-slate-600 italic border-t border-slate-100 pt-2">${item.translation}</p>` : ''}
-      ${item.note ? `<p class="text-xs font-medium text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">${item.note}</p>` : ''}
-    `;
-    return card;
-  }
+    </header>
 
-  function renderCustomNamesManager() {
-    const listEl = document.getElementById('names-list');
-    if (!listEl) return;
-    listEl.innerHTML = '';
+    <!-- Dropdown Doa Pilihan (Jika Kategori Memiliki Sub-menu) -->
+    <div id="doa-selector" class="hidden bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+      <label for="doa-dropdown" class="block text-xs font-medium text-slate-600 mb-1">Pilih Doa:</label>
+      <select id="doa-dropdown" class="w-full p-2 text-sm border rounded-lg border-slate-300 bg-white focus:ring-1 focus:ring-emerald-500 outline-none"></select>
+    </div>
 
-    localPersons.forEach((person, index) => {
-      const itemEl = document.createElement('div');
-      itemEl.className = "bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 text-xs";
+    <!-- Manager Nama Ahli Kubur (Custom Names) -->
+    <div id="custom-names-box" class="hidden bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+      <div class="flex justify-between items-center border-b pb-2 border-slate-100">
+        <h3 class="text-xs font-bold text-slate-700">Pengaturan Nama Ahli Kubur</h3>
+        <button id="add-person-btn" class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-lg hover:bg-emerald-700 transition">
+          + Tambah Nama
+        </button>
+      </div>
+      <div id="names-list" class="space-y-2"></div>
+    </div>
 
-      itemEl.innerHTML = `
-        <div class="flex justify-between items-center border-b pb-1.5 border-slate-100">
-          <span class="font-bold text-slate-700">Data #${index + 1}</span>
-          <button onclick="deletePerson(${index})" class="text-red-500 font-semibold text-xs hover:text-red-700 bg-red-50 px-2 py-0.5 rounded">Hapus</button>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] text-slate-500 mb-0.5">Keterangan / Hubungan</label>
-            <input type="text" value="${person.section}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Khusus Almarhum Ayahanda" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-[10px] text-slate-500 mb-0.5">Jenis Kelamin</label>
-            <select onchange="updatePerson(${index}, 'gender', this.value)" class="w-full p-2 border rounded border-slate-300 bg-white">
-              <option value="male" ${person.gender === 'male' ? 'selected' : ''}>Laki-Laki (الْمَغْفُوْرِ لَهُ)</option>
-              <option value="female" ${person.gender === 'female' ? 'selected' : ''}>Perempuan (الْمَغْفُوْرِ لَهَا)</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] text-slate-500 mb-0.5">Nama Latin</label>
-            <input type="text" value="${person.name}" onchange="updateNameAndAutoArabic(${index}, this.value)" placeholder="Didi Carmadi bin Waskim" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-[10px] text-slate-500 mb-0.5">Nama Arab (Dapat Disunting)</label>
-            <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="دِيْدِي جَرْمَادِي" class="w-full p-2 border rounded border-slate-300 text-right font-arabic font-bold text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
-          </div>
-        </div>
-      `;
-      listEl.appendChild(itemEl);
-    });
-  }
+    <!-- List Item / Ayat / Bacaan -->
+    <main id="content-list" class="space-y-3"></main>
 
-  window.updateNameAndAutoArabic = (index, value) => {
-    localPersons[index].name = value;
-    localPersons[index].arabic_name = latinToArabic(value);
-    saveLocalPersons();
-  };
+  </div>
 
-  window.updatePerson = (index, field, value) => {
-    localPersons[index][field] = value;
-    saveLocalPersons();
-  };
+  <script type="module">
+    import { prayersData, MENU_CATEGORIES } from './js/data-menu.js';
 
-  window.deletePerson = (index) => {
-    localPersons.splice(index, 1);
-    saveLocalPersons();
-  };
+    const urlParams = new URLSearchParams(window.location.search);
+    let categoryId = urlParams.get('id');
 
-  const addBtn = document.getElementById('add-person-btn');
-  if (addBtn) {
-    addBtn.addEventListener('click', () => {
-      localPersons.push({
-        id: Date.now(),
-        section: "Khusus Almarhum/ah",
-        gender: "male",
-        name: "Nama bin Fulan",
-        arabic_name: "فلان بن فلان"
+    // Normalisasi id jika berupa 'doa' atau mengandung parameter lain
+    if (categoryId === 'doa' || categoryId?.startsWith('doa:')) {
+      categoryId = 'doa_pilihan';
+    }
+
+    function latinToArabic(text) {
+      if (!text) return "";
+      const dictionary = {
+        'bin': 'بْنِ', 'binti': 'بِنْتِ', 'didi': 'دِيْدِي', 'carmadi': 'جَرْمَادِي',
+        'waskim': 'وَاسْكِمْ', 'fitriah': 'فِطْرِيَّة', 'fitri': 'فِطْرِي'
+      };
+      let words = text.trim().toLowerCase().split(/\s+/);
+      return words.map(word => dictionary[word] || word
+        .replace(/kh/g, 'خ').replace(/gh/g, 'غ').replace(/sh/g, 'ش').replace(/sy/g, 'ش')
+        .replace(/a/g, 'َا').replace(/i/g, 'ِي').replace(/u/g, 'ُوْ').replace(/b/g, 'ب')
+        .replace(/d/g, 'د').replace(/f/g, 'ف').replace(/j/g, 'ج').replace(/k/g, 'ك')
+        .replace(/l/g, 'ل').replace(/m/g, 'م').replace(/n/g, 'ن').replace(/r/g, 'ر')
+        .replace(/s/g, 'س').replace(/t/g, 'ت').replace(/w/g, 'و').replace(/y/g, 'ي')
+      ).join(' ');
+    }
+
+    let localPersons = JSON.parse(localStorage.getItem('custom_ahli_kubur')) || [
+      { id: 1, section: "Khusus untuk Almarhum Ayahanda", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
+      { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
+    ];
+
+    function saveLocalPersons() {
+      localStorage.setItem('custom_ahli_kubur', JSON.stringify(localPersons));
+      renderContent();
+    }
+
+    function renderContent() {
+      const categoryInfo = MENU_CATEGORIES?.find(c => c.id === categoryId);
+      const data = prayersData?.[categoryId];
+
+      const titleEl = document.getElementById('title');
+      const descEl = document.getElementById('description');
+      const container = document.getElementById('content-list');
+
+      if (!data) {
+        if (titleEl) titleEl.innerText = "Data tidak ditemukan";
+        return;
+      }
+
+      if (titleEl) titleEl.innerText = data.title || '';
+      if (descEl) descEl.innerText = categoryInfo ? categoryInfo.description : '';
+
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      const box = document.getElementById('custom-names-box');
+      if (box) {
+        if (categoryId === 'tawasul' || categoryId === 'doa_pilihan' || categoryId === 'doa') {
+          box.classList.remove('hidden');
+          renderCustomNamesManager();
+        } else {
+          box.classList.add('hidden');
+        }
+      }
+
+      if (data.items) {
+        const selectorBox = document.getElementById('doa-selector');
+        if (selectorBox) selectorBox.classList.add('hidden');
+        renderItems(data.items, container);
+      } 
+      else if (data.listDoa && data.listDoa.length > 0) {
+        const selectorBox = document.getElementById('doa-selector');
+        const dropdown = document.getElementById('doa-dropdown');
+        if (selectorBox) selectorBox.classList.remove('hidden');
+
+        if (dropdown) {
+          dropdown.innerHTML = data.listDoa.map((d, i) => `<option value="${i}">${d.title}</option>`).join('');
+
+          function displaySelectedDoa(index) {
+            container.innerHTML = '';
+            const selected = data.listDoa[index];
+            if (selected && selected.items) {
+              renderItems(selected.items, container);
+            }
+          }
+
+          dropdown.onchange = (e) => displaySelectedDoa(e.target.value);
+          displaySelectedDoa(0);
+        }
+      }
+    }
+
+    function renderItems(items, container) {
+      items.forEach((item) => {
+        if (item.type !== 'ahli_kubur') {
+          container.appendChild(createCard(item));
+        } else {
+          localPersons.forEach((person, idx) => {
+            const isMale = person.gender === 'male';
+            const arName = person.arabic_name || latinToArabic(person.name);
+
+            let arText = "";
+            let latinText = "";
+
+            if (categoryId === 'tawasul') {
+              arText = isMale 
+                ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${arName}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
+                : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${arName}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
+
+              latinText = isMale
+                ? `Wa khushūshan ilā rūhi abīnā/akhīnal-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`
+                : `Wa khushūshan ilā rūhi umminā/ukhtinal-maghfūr lahā ${person.name}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...`;
+            } else {
+              arText = isMale 
+                ? `اَللّٰهُمَّ خُصُوْصًا إِلَى رُوْحِ ${arName}\n\nاَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ. وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ. وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ. وَنَقِّهِ مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ.\n\nاَللّٰهُمَّ أَنْزِلِ الرَّحْمَةَ وَالْمَغْفِرَةَ عَلَى قَبْرِهِ. وَاجْعَلْ قَبْرَهُ رَوْضَةً مِنْ رِيَاضِ الْجَنَّةِ، وَلَا تَجْعَلْ قَبْرَهُ حُفْرَةً مِنْ حُفَرِ النِّيْرَانِ. اَللّٰهُمَّ جَازِهِ بِالْإِحْسَانِ إِحْسَانًا، وَبِالسَّيِّئَاتِ عَفْوًا وَغُفْرَانًا.`
+                : `اَللّٰهُمَّ خُصُوْصًا إِلَى رُوْحِ ${arName}\n\nاَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا. وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا. وَاغْسِلْهَا بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ. وَنَقِّهَا مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ.\n\nاَللّٰهُمَّ أَنْزِلِ الرَّحْمَةَ وَالْمَغْفِرَةَ عَلَى قَبْرِهَا. وَاجْعَلْ قَبْرَهَا رَوْضَةً مِنْ رِيَاضِ الْجَنَّةِ، وَلَا تَجْعَلْ قَبْرَهَا حُفْرَةً مِنْ حُفَرِ النِّيْرَانِ. اَللّٰهُمَّ جَازِهَا بِالْإِحْسَانِ إِحْسَانًا، وَبِالسَّيِّئَاتِ عَفْوًا وَغُفْرَانًا.`;
+
+              latinText = isMale
+                ? `Allāhumma khushūshan ilā rūhi ${person.name}\n\nAllāhummaghfir lahū, / warhamhū, / wa 'āfihī, / wa'fu 'anhū. / Wa akrim nuzulahū, / wa wassi' madkhalahū. / Waghsilhu bil-mā'i / wats-tsalji / wal-barad. / Wa naqqihī minal-khathāyā / kamā yunaqqats-tsaubul-abyadhu / minad-danas.\n\nAllāhumma anzilir-rahmata / wal-maghfirata / 'alā qabrihī. / Waj'al qabrahū / raudhatan min riyādhil-jannah. / Wa lā taj'al qabrahū / hufratan min hufarin-nīrān. / Allāhumma jāzihī bil-ihsāni ihsānā, / wa bis-sayyi'āti / 'afwan wa ghufrānā.`
+                : `Allāhumma khushūshan ilā rūhi ${person.name}\n\nAllāhummaghfir lahā, / warhamhā, / wa 'āfihā, / wa'fu 'anhā. / Wa akrim nuzulahā, / wa wassi' madkhalahā. / Waghsilhā bil-mā'i / wats-tsalji / wal-barad. / Wa naqqihā minal-khathāyā / kamā yunaqqats-tsaubul-abyadhu / minad-danas.\n\nAllāhumma anzilir-rahmata / wal-maghfirata / 'alā qabrihā. / Waj'al qabrahā / raudhatan min riyādhil-jannah. / Wa lā taj'al qabrahā / hufratan min hufarin-nīrān. / Allāhumma jāzihā bil-ihsāni ihsānā, / wa bis-sayyi'āti / 'afwan wa ghufrānā.`;
+            }
+
+            const customCardData = {
+              number: `${item.number || '3'}${String.fromCharCode(97 + idx)}`,
+              section: person.section,
+              arabic: arText,
+              latin: latinText
+            };
+            container.appendChild(createCard(customCardData));
+          });
+        }
       });
-      saveLocalPersons();
-    });
-  }
+    }
 
-  renderContent();
-</script>
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = "bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
+      
+      let headerText = item.section ? `${item.number ? item.number + '. ' : ''}${item.section}` : `Ayat / Bacaan #${item.number || ''}`;
+
+      card.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-semibold text-emerald-700">
+          <span class="bg-emerald-50 px-2.5 py-1 rounded-full">${headerText}</span>
+        </div>
+        <p class="text-right text-2xl sm:text-3xl font-arabic font-bold leading-loose text-slate-800" dir="rtl">${(item.arabic || '').replace(/\n/g, '<br>')}</p>
+        <p class="text-xs sm:text-sm font-medium text-emerald-800 leading-relaxed">${(item.latin || '').replace(/\n/g, '<br>')}</p>
+        ${item.translation ? `<p class="text-xs text-slate-600 italic border-t border-slate-100 pt-2">${item.translation}</p>` : ''}
+        ${item.note ? `<p class="text-xs font-medium text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">${item.note}</p>` : ''}
+      `;
+      return card;
+    }
+
+    function renderCustomNamesManager() {
+      const listEl = document.getElementById('names-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      localPersons.forEach((person, index) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = "bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 text-xs";
+
+        itemEl.innerHTML = `
+          <div class="flex justify-between items-center border-b pb-1.5 border-slate-100">
+            <span class="font-bold text-slate-700">Data #${index + 1}</span>
+            <button onclick="deletePerson(${index})" class="text-red-500 font-semibold text-xs hover:text-red-700 bg-red-50 px-2 py-0.5 rounded">Hapus</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Keterangan / Hubungan</label>
+              <input type="text" value="${person.section}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Khusus Almarhum Ayahanda" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Jenis Kelamin</label>
+              <select onchange="updatePerson(${index}, 'gender', this.value)" class="w-full p-2 border rounded border-slate-300 bg-white">
+                <option value="male" ${person.gender === 'male' ? 'selected' : ''}>Laki-Laki (الْمَغْفُوْرِ لَهُ)</option>
+                <option value="female" ${person.gender === 'female' ? 'selected' : ''}>Perempuan (الْمَغْفُوْرِ لَهَا)</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Nama Latin</label>
+              <input type="text" value="${person.name}" onchange="updateNameAndAutoArabic(${index}, this.value)" placeholder="Didi Carmadi bin Waskim" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Nama Arab (Dapat Disunting)</label>
+              <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="دِيْدِي جَرْمَادِي" class="w-full p-2 border rounded border-slate-300 text-right font-arabic font-bold text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
+            </div>
+          </div>
+        `;
+        listEl.appendChild(itemEl);
+      });
+    }
+
+    window.updateNameAndAutoArabic = (index, value) => {
+      localPersons[index].name = value;
+      localPersons[index].arabic_name = latinToArabic(value);
+      saveLocalPersons();
+    };
+
+    window.updatePerson = (index, field, value) => {
+      localPersons[index][field] = value;
+      saveLocalPersons();
+    };
+
+    window.deletePerson = (index) => {
+      localPersons.splice(index, 1);
+      saveLocalPersons();
+    };
+
+    const addBtn = document.getElementById('add-person-btn');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        localPersons.push({
+          id: Date.now(),
+          section: "Khusus Almarhum/ah",
+          gender: "male",
+          name: "Nama bin Fulan",
+          arabic_name: "فلان بن فلان"
+        });
+        saveLocalPersons();
+      });
+    }
+
+    renderContent();
+  </script>
+</body>
+</html>
