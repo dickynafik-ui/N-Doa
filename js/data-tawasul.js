@@ -1,5 +1,3 @@
-// js/data-tawasul.js
-
 export const tawasulData = {
   title: "Tawasul / Hadrah Lengkap",
   category: "Tawasul & Hadrah",
@@ -53,8 +51,8 @@ export const tawasulData = {
       section: "Khusus untuk Almarhum Ayahanda",
       name: "Didi Carmadi bin Waskim",
       arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ",
-      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا الْمَغْفُوْرِ لَهُ {NAME}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...",
-      latin: "Wa khushūshan ilā rūhi abīnal-maghfūr lah {NAME}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...",
+      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا الْمَغْفُوْرِ لَهُ دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...",
+      latin: "Wa khushūshan ilā rūhi abīnal-maghfūr lah Didi Carmadi bin Waskim. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...",
       note: "👉 Jamaah membaca Al-Fatihah 1x"
     },
     {
@@ -64,8 +62,8 @@ export const tawasulData = {
       section: "Khusus untuk Almarhumah Saudari / Teteh",
       name: "Fitriah binti Didi Carmadi",
       arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي",
-      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أُخْتِنَا الْمَغْفُوْرِ لَهَا {NAME}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...",
-      latin: "Wa khushūshan ilā rūhi ukhtinal-maghfūr lahā {NAME}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...",
+      arabic: "وَخُصُوْصًا إِلَى رُوْحِ أُخْتِنَا الْمَغْفُوْرِ لَهَا فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...",
+      latin: "Wa khushūshan ilā rūhi ukhtinal-maghfūr lahā Fitriah binti Didi Carmadi. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...",
       note: "👉 Jamaah membaca Al-Fatihah 1x"
     },
     {
