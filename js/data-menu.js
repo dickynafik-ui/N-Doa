@@ -2,7 +2,7 @@
 
 import { yasinData } from './data-yasin.js';
 import { tawasulData } from './data-tawasul.js';
-import { daftarDoaPilihan } from './doas/index.js'; // Import daftar modul doa
+import { daftarDoaPilihan } from './doas/index.js';
 
 // Kategori Menu Utama untuk index.html
 export const MENU_CATEGORIES = [
@@ -19,7 +19,7 @@ export const MENU_CATEGORIES = [
     icon: '🤲'
   },
   {
-    id: 'doa_pilihan', // Disesuaikan menjadi doa_pilihan
+    id: 'doa_pilihan',
     title: 'Doa-Doa Pilihan',
     description: 'Kumpulan doa harian, doa selamat, dan doa tahlil',
     icon: '🤲'
@@ -32,6 +32,11 @@ export const prayersData = {
   "tawasul": tawasulData,
   "doa_pilihan": {
     title: "Doa-Doa Pilihan",
-    listDoa: daftarDoaPilihan // Mengambil isi dari js/doas/index.js
+    listDoa: daftarDoaPilihan
+  },
+  // Alias jika ada tautan lama yang masih memanggil id "doa"
+  "doa": {
+    title: "Doa-Doa Pilihan",
+    listDoa: daftarDoaPilihan
   }
 };
