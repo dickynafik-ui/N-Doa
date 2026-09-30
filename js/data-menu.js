@@ -23,7 +23,7 @@ export const MENU_CATEGORIES = [
     id: 'doa_pilihan',
     title: 'Doa-Doa Pilihan',
     description: 'Kumpulan doa harian, doa selamat, dan doa tahlil',
-    icon: '🤲'
+    icon: '📓'
   }
 ];
 
