@@ -99,8 +99,8 @@
     }
 
     let localPersons = JSON.parse(localStorage.getItem('custom_ahli_kubur')) || [
-      { id: 1, section: "Khusus untuk Almarhum Ayahanda", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
-      { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
+      { id: 1, section: "Khusus untuk Almarhum Ayahanda", relation: "father", gender: "male", name: "Didi Carmadi bin Waskim", arabic_name: "دِيْدِي جَرْمَادِي بْنِ وَاسْكِمْ" },
+      { id: 2, section: "Khusus untuk Almarhumah Saudari / Teteh", relation: "sister", gender: "female", name: "Fitriah binti Didi Carmadi", arabic_name: "فِطْرِيَّة بِنْتِ دِيْدِي جَرْمَادِي" }
     ];
 
     function saveLocalPersons() {
@@ -173,17 +173,39 @@
             const isMale = person.gender === 'male';
             const arName = person.arabic_name || latinToArabic(person.name);
 
+            // Pengaturan sebutan/hubungan
+            let arRelation = "";
+            let latinRelation = "";
+
+            if (person.relation === 'father') {
+              arRelation = " أَبِيْنَا";
+              latinRelation = " abīnā";
+            } else if (person.relation === 'mother') {
+              arRelation = " أُمِّنَا";
+              latinRelation = " umminā";
+            } else if (person.relation === 'brother') {
+              arRelation = " أَخِيْنَا";
+              latinRelation = " akhīnā";
+            } else if (person.relation === 'sister') {
+              arRelation = " أُخْتِنَا";
+              latinRelation = " ukhtinā";
+            } else {
+              // Jika umum / tanpa sebutan khusus
+              arRelation = "";
+              latinRelation = "";
+            }
+
             let arText = "";
             let latinText = "";
 
             if (categoryId === 'tawasul') {
-              arText = isMale 
-                ? `وَخُصُوْصًا إِلَى رُوْحِ أَبِيْنَا/أَخِيْنَا الْمَغْفُوْرِ لَهُ ${arName}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`
-                : `وَخُصُوْصًا إِلَى رُوْحِ أُمِّنَا/أُخْتِنَا الْمَغْفُوْرِ لَهَا ${arName}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
-
-              latinText = isMale
-                ? `Wa khushūshan ilā rūhi abīnā/akhīnal-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`
-                : `Wa khushūshan ilā rūhi umminā/ukhtinal-maghfūr lahā ${person.name}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...`;
+              if (isMale) {
+                arText = `وَخُصُوْصًا إِلَى رُوْحِ${arRelation} الْمَغْفُوْرِ لَهُ ${arName}. اَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ، وَاجْعَلِ الْجَنَّةَ مَثْوَاهُ، شَيْءٌ لِلّٰهِ لَهُ، الْفَاتِحَةُ...`;
+                latinText = `Wa khushūshan ilā rūhi${latinRelation} al-maghfūr lah ${person.name}. Allāhummaghfir lahū warhamhū wa 'āfihī wa'fu 'anhū, wa akrim nuzulahū wa wassi' madkhalahū, waj'alil-jannata matswāhu, syai'un lillāhi lahū, Al-Fātiḥah...`;
+              } else {
+                arText = `وَخُصُوْصًا إِلَى رُوْحِ${arRelation} الْمَغْفُوْرِ لَهَا ${arName}. اَللّٰهُمَّ اغْفِرْ لَهَا وَارْحَمْهَا وَعَافِهَا وَاعْفُ عَنْهَا، وَأَكْرِمْ نُزُلَهَا وَوَسِّعْ مَدْخَلَهَا، وَاجْعَلِ الْجَنَّةَ مَثْوَاهَا، شَيْءٌ لِلّٰهِ لَهَا، الْفَاتِحَةُ...`;
+                latinText = `Wa khushūshan ilā rūhi${latinRelation} al-maghfūr lahā ${person.name}. Allāhummaghfir lahā warhamhā wa 'āfihā wa'fu 'anhā, wa akrim nuzulahā wa wassi' madkhalahā, waj'alil-jannata matswāhā, syai'un lillāhi lahā, Al-Fātiḥah...`;
+              }
             } else {
               arText = isMale 
                 ? `اَللّٰهُمَّ خُصُوْصًا إِلَى رُوْحِ ${arName}\n\nاَللّٰهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ. وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مَدْخَلَهُ. وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ. وَنَقِّهِ مِنَ الْخَطَايَا كَمَا يُنَقَّى الثَّوْبُ الْأَبْيَضُ مِنَ الدَّنَسِ.\n\nاَللّٰهُمَّ أَنْزِلِ الرَّحْمَةَ وَالْمَغْفِرَةَ عَلَى قَبْرِهِ. وَاجْعَلْ قَبْرَهُ رَوْضَةً مِنْ رِيَاضِ الْجَنَّةِ، وَلَا تَجْعَلْ قَبْرَهُ حُفْرَةً مِنْ حُفَرِ النِّيْرَانِ. اَللّٰهُمَّ جَازِهِ بِالْإِحْسَانِ إِحْسَانًا، وَبِالسَّيِّئَاتِ عَفْوًا وَغُفْرَانًا.`
@@ -239,10 +261,20 @@
             <span class="font-bold text-slate-700">Data #${index + 1}</span>
             <button onclick="deletePerson(${index})" class="text-red-500 font-semibold text-xs hover:text-red-700 bg-red-50 px-2 py-0.5 rounded cursor-pointer">Hapus</button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div>
-              <label class="block text-[10px] text-slate-500 mb-0.5">Keterangan / Hubungan</label>
-              <input type="text" value="${person.section}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Khusus Almarhum Ayahanda" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
+              <label class="block text-[10px] text-slate-500 mb-0.5">Keterangan / Judul</label>
+              <input type="text" value="${person.section || ''}" onchange="updatePerson(${index}, 'section', this.value)" placeholder="Khusus Almarhum..." class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Panggilan / Hubungan</label>
+              <select onchange="updatePerson(${index}, 'relation', this.value)" class="w-full p-2 border rounded border-slate-300 bg-white">
+                <option value="general" ${(!person.relation || person.relation === 'general') ? 'selected' : ''}>Umum / Tanpa Sebutan</option>
+                <option value="father" ${person.relation === 'father' ? 'selected' : ''}>Ayahanda (أَبِيْنَا)</option>
+                <option value="mother" ${person.relation === 'mother' ? 'selected' : ''}>Ibunda (أُمِّنَا)</option>
+                <option value="brother" ${person.relation === 'brother' ? 'selected' : ''}>Saudara (أَخِيْنَا)</option>
+                <option value="sister" ${person.relation === 'sister' ? 'selected' : ''}>Saudari (أُخْتِنَا)</option>
+              </select>
             </div>
             <div>
               <label class="block text-[10px] text-slate-500 mb-0.5">Jenis Kelamin</label>
@@ -255,11 +287,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
               <label class="block text-[10px] text-slate-500 mb-0.5">Nama Latin</label>
-              <input type="text" value="${person.name}" onchange="updateNameAndAutoArabic(${index}, this.value)" placeholder="Didi Carmadi bin Waskim" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
+              <input type="text" value="${person.name}" onchange="updateNameAndAutoArabic(${index}, this.value)" placeholder="Nama bin/binti Fulan" class="w-full p-2 border rounded border-slate-300 focus:ring-1 focus:ring-emerald-500 outline-none">
             </div>
             <div>
               <label class="block text-[10px] text-slate-500 mb-0.5">Nama Arab (Dapat Disunting)</label>
-              <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="دِيْدِي جَرْمَادِي" class="w-full p-2 border rounded border-slate-300 text-right font-arabic text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
+              <input type="text" value="${person.arabic_name || latinToArabic(person.name)}" onchange="updatePerson(${index}, 'arabic_name', this.value)" placeholder="Nama Arab" class="w-full p-2 border rounded border-slate-300 text-right font-arabic text-emerald-800 focus:ring-1 focus:ring-emerald-500 outline-none" dir="rtl">
             </div>
           </div>
         `;
@@ -288,7 +320,8 @@
       addBtn.addEventListener('click', () => {
         localPersons.push({
           id: Date.now(),
-          section: "Khusus Almarhum/ah",
+          section: "Khusus Almarhum",
+          relation: "general", // Default ke Umum / Tanpa sebutan
           gender: "male",
           name: "Nama bin Fulan",
           arabic_name: "فلان بن فلان"
