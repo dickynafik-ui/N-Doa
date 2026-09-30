@@ -1,11 +1,11 @@
 // js/data-menu.js
 
-// Karena file ini ada di dalam folder 'js/', maka import file selevel menggunakan ./
+// Import modul selevel menggunakan path relatif ./
 import { yasinData } from './data-yasin.js';
 import { tawasulData } from './data-tawasul.js';
 import { daftarDoaPilihan } from './doas/index.js';
 
-// Kategori Menu Utama untuk index.html
+// Kategori Menu Utama untuk index.html & category.html
 export const MENU_CATEGORIES = [
   {
     id: 'yasin',
